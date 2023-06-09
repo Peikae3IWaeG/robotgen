@@ -42,14 +42,14 @@ def generate_kubernetes():
             if raise_issues_from_form[0] != "none":
                 cli_parser = cliParser()
                 cli_parser.from_params(
-                    name=str(index) + form.name.data,
+                    name=str(index),
                     cmd=form.command.data,
                     regex=issue.regex.data,
                     severity=issue.severity.data,
                     raise_issues=raise_issues_from_form,
                     targets=targets_from_form,
                     assertions=assertions_from_form,
-                    details="aa",
+                    details=issue.details.data,
                 )
                 issues_stanzas.append(
                     TestCaseSection(
