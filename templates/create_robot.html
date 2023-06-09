@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST" action="/">
+    {{ cli_form.command.label }}
+    {{ cli_form.binary()}} {{ cli_form.command()}}
+    <br>
+    {{ cli_form.name.label }}
+    {{ cli_form.name()}}
+    <br>
+    {{ cli_form.tags.label }}
+    {{ cli_form.tags()}}
+    <br>
+    {{ cli_form.docs.label }}
+    {{ cli_form.docs()}}
+    <br>
+
+    <h1> Issues </h1>
+    {% for issue in issue_forms %}
+    <h1> No {{ loop.index }} </h1>
+    {{ issue.severity.label }}
+    <br> 
+    {{ issue.severity() }}
+    <br> 
+    {{ issue.regex.label }} 
+    <br>    
+    {{ issue.regex() }} 
+    <br>
+    <br> 
+    {{ issue.details.label }} 
+    <br>    
+    {{ issue.details() }} 
+    <br>
+    {% for raise_issue in issue.raise_issue_if%}
+    <br>
+    {{ loop.index }} - {{ raise_issue.label }}
+    {{ raise_issue() }}
+    {% endfor %}
+    <br>
+    {% for target in issue.target%}
+    <br>
+    {{ loop.index }} - {{ target.label }}
+    {{ target() }}
+    {% endfor %}
+    <br>
+
+    {% for assertion in issue.assertion%}
+    <br>
+    {{ loop.index }} - {{ assertion.label }}
+    {{ assertion() }}
+    {% endfor %}
+
+
+
+    <br>    <br>
+    {% endfor %}
+   
+    <input type="submit" value="Submit">
+
+</form>
+{% endblock %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} - ROBOTRON2000</title>
+    <style>
+        nav a {
+            font-size: 3em;
+            margin-left: 50px;
+            text-decoration: none;
+            
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('generate_kubernetes') }}">Generate kubectl task</a>
+
+    </nav>
+    <hr>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+<script>
+    window.onload = function() {
+        let addMovieFieldBtn = document.getElementById('add-arg');
+        addMovieFieldBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            let allMoviesFieldWrapper = document.getElementById('kwargs');
+            let allMoviesField = allMoviesFieldWrapper.getElementsByTagName('input');
+            if(allMoviesField.length > 4) {
+                alert('Prrrrt');
+                return;
+            }
+            let movieInputIds = []
+            for(let i = 0; i < allMoviesField.length; i++) {
+                movieInputIds.push(parseInt(allMoviesField[i].name.split('-')[1]));
+            }
+            let newFieldName = `movies-${Math.max(...movieInputIds) + 1}`;
+            allMoviesFieldWrapper.insertAdjacentHTML('beforeend',`
+            <li><label for="${newFieldName}">Argument</label> <input id="${newFieldName}" name="${newFieldName}" type="text" value=""></li> 
+            `);
+        });
+    }
+</script>
+</html>
