@@ -82,7 +82,7 @@ class cliParser(Parser):
                 params_dict[
                     "{}_{}".format(self.targets[i], self.raise_issues[i])
                 ] = self.assertions[i]
-        print(params_dict)
+        # print(params_dict)
 
         additional_parameters = {
             "set_issue_title": "Running command |{}| failed ".format(self.cmd),

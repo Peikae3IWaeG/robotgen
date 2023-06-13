@@ -29,6 +29,7 @@ from robot.parsing.model.statements import (
 from helpers import (
     generate_assign_variable_keyword_section,
     generate_documentation_section,
+    set_suite_variable,
 )
 from parsers import Parser, cliParser
 
@@ -142,26 +143,110 @@ class kubectlRobot(Robot):
         self.cmd = cmd
 
 
+class RobotVariables:
+    def __init__(self, name, type, default, example, description, enum, secret):
+        self.name = name
+        self.type = type
+        self.default = default
+        self.example = example
+        self.description = description
+        self.enum = enum
+        self.secret = secret
+
+    name = None
+    type = None
+    default = "No default value"
+    example = "No example"
+    description = "No description"
+    enum = None
+    enum = False
+
+
+class ImportedVariables(RobotVariables):
+    def __init__(self, name, type, default, example, description, enum, secret) -> None:
+        super().__init__(name, type, default, example, description, enum, secret)
+
+    def from_params(self, name):
+        self.name = name
+
+    def __generate_enum(self):
+        if self.enum != None:
+            try:
+                return self.enum.split(",")
+            except:
+                return None
+
+    def dump(self):
+        return {
+            "name": self.name,
+            "default": self.default,
+            "example": self.example,
+            "description": self.description,
+            "enum": self.__generate_enum(),
+            "secret": self.secret,
+        }
+
+
 class suiteInit:
     name = "Suite Initialization"
     builtin_variables = []
+    builtin_secrets = []
+    user_variables = []
+    user_secrets = []
 
     def __init__(self) -> None:
         pass
 
+    def generate_set_suite_variables(self):
+        combined_list = self.builtin_variables + self.user_variables
+        return [set_suite_variable(x.get("name"), x.get("name")) for x in combined_list]
+
+    def generate_variables(self):
+        print(self.user_variables)
+        return [
+            self.import_user_variable(
+                variable_name=x["name"],
+                var_type=x.get("type", None),
+                description=x.get("description", None),
+                enum=x.get("enum", None),
+                pattern=x.get("pattern", "\w*"),
+                default=x.get("default", "No default value"),
+                example=x.get("example", "No example*"),
+                secret=x.get("secret", False),
+            )
+            for x in self.builtin_variables
+        ] + [
+            self.import_user_variable(
+                variable_name=x["name"],
+                var_type=x.get("type", None),
+                description=x.get("description", None),
+                enum=x.get("enum", None),
+                pattern=x.get("pattern", "\w*"),
+                default=x.get("default", "No default value"),
+                example=x.get("example", "No example*"),
+                secret=x.get("secret", False),
+            )
+            for x in self.user_variables
+        ]
+
     def import_user_variable(
         self,
+        enum,
         variable_name,
-        enum=None,
-        var_type="string",
-        description="None",
-        pattern="\w*",
-        default="None",
-        example="None",
+        var_type,
+        description,
+        pattern,
+        default,
+        example,
+        secret,
     ):
+        keyword = (
+            "RW.Core.Import User Secret" if secret else "RW.Core.Import User Variable"
+        )
+
         kw_call = KeywordCall.from_tokens(
             tokens=generate_assign_variable_keyword_section(
-                keyword="RW.Core.Import User Variable",
+                keyword=keyword,
                 parameters={
                     "varname": variable_name,
                     "enum": enum,
@@ -217,48 +302,29 @@ class suiteInit:
 
     def generate_cmd(self):
         test_case = TestCase(
-            header=TestCaseName.from_params(self.name), body=self.builtin_variables
+            header=TestCaseName.from_params(self.name),
+            body=[
+                self.import_service(
+                    "kubectl", "kubectl-service.shared", "kubectl-service.shared"
+                )
+            ]
+            + self.generate_variables(),
         )
 
         return TestCaseSection(
-            header=SectionHeader.from_params(Token.KEYWORD_HEADER), body=[test_case]
+            header=SectionHeader.from_params(Token.KEYWORD_HEADER),
+            body=[test_case] + self.generate_set_suite_variables(),
         )
 
 
 class kubernetesSuiteInit(suiteInit):
     def __init__(self) -> None:
         super().__init__()
-        self.builtin_variables = [
-            self.import_service(
-                variable_name="kubectl",
-                default="kubectl-service.shared",
-                example="kubectl-service.shared",
-            ),
-            self.import_user_variable(
-                variable_name="KUBERNETES_DISTRIBUTION_BINARY",
-                var_type="string",
-                description="Which binary to use for Kubernetes CLI commands",
-                enum=["kubectl", "oc"],
-                example="default",
-                default="default",
-            ),
-            self.import_user_variable(
-                variable_name="NAMESPACE",
-                var_type="string",
-                description="The name of the namespace to search",
-                example="default",
-                default="default",
-            ),
-            self.import_user_variable(
-                variable_name="CONTEXT",
-                var_type="string",
-                description="Which Kubernetes context to operate within",
-                example="my-main-cluster",
-            ),
-            self.import_user_secret(
-                variable_name="kubeconfig",
-                var_type="string",
-                description="The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s)",
-                example="For examples, start here https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/",
-            ),
+        self.builtin_variables = []
+        self.builtin_secrets = [
+            {
+                "variable": "kubeconfig",
+                "type": "string",
+                "description": "The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s)",
+            },
         ]

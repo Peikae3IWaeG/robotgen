@@ -17,8 +17,14 @@ from robot.parsing.model.statements import (
     KeywordCall,
 )
 
-from helpers import RobotFormNew, IssueForm
-from robots import kubectlRobot, cliParser, suiteInit, kubernetesSuiteInit
+from helpers import RobotFormNew, IssueForm, CustomVariableForm
+from robots import (
+    kubectlRobot,
+    cliParser,
+    suiteInit,
+    kubernetesSuiteInit,
+    ImportedVariables,
+)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "aaa"
@@ -27,12 +33,30 @@ app.config["SECRET_KEY"] = "aaa"
 @app.route("/", methods=("GET", "POST"))
 def generate_kubernetes():
     form = RobotFormNew()
+    suite = kubernetesSuiteInit()
 
+    var_forms = [CustomVariableForm(prefix=str(x)) for x in range(0, 5)]
     issues_list = [IssueForm(prefix=str(x)) for x in range(0, 5)]
 
     if request.method == "POST":
         robot = kubectlRobot()
         issues_stanzas = []
+        imported_vars = [
+            ImportedVariables(
+                name=x.name.data,
+                type=x.type.data,
+                default=x.default.data,
+                example=x.example.data,
+                description=x.description.data,
+                enum=x.enum.data,
+                secret=x.secret.data,
+            )
+            for x in var_forms
+            if x.name.data != ""
+        ]
+
+        for item in imported_vars:
+            suite.user_variables = suite.user_variables + [item.dump()]
 
         for index, issue in enumerate(issues_list):
             raise_issues_from_form = [x.data for x in issue.raise_issue_if]
@@ -65,10 +89,8 @@ def generate_kubernetes():
             name=form.name.data,
             docs=form.docs.data,
             tags=form.tags.data,
-            cmd=form.binary.data + " " + form.command.data,
+            cmd=form.command.data,
         )
-
-        suite = kubernetesSuiteInit()
 
         test_cases = TestCaseSection(
             header="Test",
@@ -84,11 +106,16 @@ def generate_kubernetes():
         f = open("testsuite.robot")
         # print(f.read())
         robotfile = f.read()
-        print(robotfile)
+        # print(robotfile)
         return render_template("show_robot.html", robot_file=robotfile)
 
     return render_template(
-        "create_robot.html", cli_form=form, issue_forms=issues_list, robots=[]
+        "create_robot.html",
+        cli_form=form,
+        suite=suite,
+        var_forms=var_forms,
+        issue_forms=issues_list,
+        robots=[],
     )
 
 

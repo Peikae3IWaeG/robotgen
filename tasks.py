@@ -57,7 +57,7 @@ test_cases = TestCaseSection(
 cli = a.generate_cmd()
 cli_parser = cliParser().generate_keyword()
 sections = [test_cases]
-print(sections)
+# print(sections)
 
 model = File(sections, "testsuite.robot")
 model.save()

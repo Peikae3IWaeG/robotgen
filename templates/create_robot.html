@@ -3,8 +3,25 @@
 {% block content %}
 
 <form method="POST" action="/">
+    <h2> Custom variables </h2> 
+    {% for var in var_forms  %}
+    Add custom variable named 
+    {{ var.name()}}
+    of type 
+    {{ var.type()}}
+    <br>
+    {{ var.default.label}}
+    {{ var.default()}} or use comma separated list for enum dropdown
+    {{ var.enum()}}
+    secret {{ var.secret()}}
+    <br>
+    {{ var.description.label}}
+    {{ var.description()}}
+    <hr>
+    {% endfor %}
+    <h2> Run CLI </h2> 
     {{ cli_form.command.label }}
-    {{ cli_form.binary()}} {{ cli_form.command()}}
+    {{ cli_form.command()}}
     <br>
     {{ cli_form.name.label }}
     {{ cli_form.name()}}
@@ -15,15 +32,14 @@
     {{ cli_form.docs.label }}
     {{ cli_form.docs()}}
     <br>
+    <h2> Issues </h2>
+    <hr>
 
-    <h1> Issues </h1>
     {% for issue in issue_forms %}
-    <h1> No {{ loop.index }} </h1>
     {{ issue.severity.label }}
     <br> 
     {{ issue.severity() }}
     <br>
-
     <br> 
     {{ issue.regex.label }} 
     <br>    
@@ -36,16 +52,19 @@
     <br>
 
     {% for item in range(0, issue.raise_issue_if | length) %}
-    <h4>Raise issue if </h4>
+    <p>Raise issue if 
     (use <b>_line</b> or regex group )
     {{ issue.target[item]}}
     is
     {{ issue.raise_issue_if[item] }} 
     {{ issue.assertion[item]}}
+    </p>
     <br>
     {% endfor %}
 
-    <br>    <br>
+    <br> 
+    <hr>
+
     {% endfor %}
    
     <input type="submit" value="Submit">

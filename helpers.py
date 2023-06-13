@@ -7,6 +7,7 @@ from wtforms import StringField
 from robot.parsing.lexer.tokens import Token
 from robot.parsing.model.statements import (
     Documentation,
+    VariablesImport,
     KeywordCall,
 )
 
@@ -29,11 +30,10 @@ ACTIONS = [
     ("raise_issue_if_ncontains", "Not contains"),
 ]
 
+VAR_TYPES = [("string"), ("othertype-1"), ("othertype-2")]
+
 
 class RobotFormNew(FlaskForm):
-    binary = SelectField(
-        label="Raise issue if: ", choices=[("kubectl", "kubectl"), ("oc", "oc")]
-    )
     command = StringField("Command")
     name = StringField("Display Name")
     tags = StringField("Tags comma separated")
@@ -42,6 +42,16 @@ class RobotFormNew(FlaskForm):
     regex = StringField(
         "Filter stdout lines by regex. Ommit this field to evaluate all lines"
     )
+
+
+class CustomVariableForm(FlaskForm):
+    name = StringField("Variable Name")
+    type = SelectField(label="Type", choices=VAR_TYPES)
+    default = StringField("Set the default value")
+    example = StringField("Example")
+    description = StringField("Extra description")
+    enum = StringField("Enumerated values to choose from")
+    secret = BooleanField("Secret")
 
 
 class IssueForm(FlaskForm):
@@ -97,7 +107,7 @@ def generate_keyword(paramaters):
             ]
         )
     a = flatten(a)
-    print(a[:-1])
+    # print(a[:-1])
     return a
 
 
@@ -130,6 +140,19 @@ def keyword_header(keyword, params):
         Token(Token.KEYWORD, params),
         Token(Token.EOL, "\n"),
     ]
+
+
+def set_suite_variable(param1, param2):
+    return VariablesImport.from_tokens(
+        tokens=[
+            Token(Token.KEYWORD, "Set Suite Variable"),
+            Token(Token.SEPARATOR, "    "),
+            Token(Token.KEYWORD, "${{{}}}".format(param1)),
+            Token(Token.SEPARATOR, "    "),
+            Token(Token.KEYWORD, "${{{}}}".format(param2)),
+            Token(Token.EOL, "\n"),
+        ]
+    )
 
 
 def generate_documentation_section(content):
