@@ -320,11 +320,11 @@ class suiteInit:
 class kubernetesSuiteInit(suiteInit):
     def __init__(self) -> None:
         super().__init__()
-        self.builtin_variables = []
-        self.builtin_secrets = [
+        self.builtin_variables = [
             {
-                "variable": "kubeconfig",
+                "name": "kubeconfig",
                 "type": "string",
                 "description": "The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s)",
+                "secret": True
             },
         ]
