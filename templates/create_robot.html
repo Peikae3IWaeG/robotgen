@@ -22,36 +22,28 @@
     {{ issue.severity.label }}
     <br> 
     {{ issue.severity() }}
+    <br>
+
     <br> 
     {{ issue.regex.label }} 
     <br>    
     {{ issue.regex() }} 
     <br>
-    <br> 
     {{ issue.details.label }} 
     <br>    
     {{ issue.details() }} 
     <br>
-    {% for raise_issue in issue.raise_issue_if%}
-    <br>
-    {{ loop.index }} - {{ raise_issue.label }}
-    {{ raise_issue() }}
-    {% endfor %}
-    <br>
-    {% for target in issue.target%}
-    <br>
-    {{ loop.index }} - {{ target.label }}
-    {{ target() }}
-    {% endfor %}
     <br>
 
-    {% for assertion in issue.assertion%}
+    {% for item in range(0, issue.raise_issue_if | length) %}
+    <h4>Raise issue if </h4>
+    (use <b>_line</b> or regex group )
+    {{ issue.target[item]}}
+    is
+    {{ issue.raise_issue_if[item] }} 
+    {{ issue.assertion[item]}}
     <br>
-    {{ loop.index }} - {{ assertion.label }}
-    {{ assertion() }}
     {% endfor %}
-
-
 
     <br>    <br>
     {% endfor %}
