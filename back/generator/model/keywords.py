@@ -2,7 +2,7 @@ from .robot import Component
 
 from robot.parsing.model.statements import KeywordCall
 from robot.parsing.lexer.tokens import Token
-
+from typing import List
 
 def flatten(l):
     return [item for sublist in l for item in sublist]
@@ -112,8 +112,8 @@ class RwCliRunCli(KeywordCallGenerator):
         variable="",
         cmd: str = "string",
         render_in_commandlist: bool = True,
-        target_service: any = None,
-        secret_file__kubeconfig: any = None,
+        target_service: any = "${kubectl}",
+        secret_file__kubeconfig: any = "${kubeconfig}",
         env: any = None,
     ) -> None:
         super().__init__(assign_to_variable, variable)
@@ -124,6 +124,8 @@ class RwCliRunCli(KeywordCallGenerator):
             "secret_file__kubeconfig": secret_file__kubeconfig,
             "env": env,
         }
+
+
 
 
 class RwCliParseCliOutputByLine(KeywordCallGenerator):
@@ -138,6 +140,7 @@ class RwCliParseCliOutputByLine(KeywordCallGenerator):
         assign_to_variable=False,
         variable="",
         rsp: str = "",
+        regex: str = "",
         set_severity_Level: int = 1,
         set_issue_expected: str = "",
         set_issue_actual: str = "",
@@ -149,6 +152,7 @@ class RwCliParseCliOutputByLine(KeywordCallGenerator):
 
         self.kwargs = {
             "rsp": rsp,
+            "lines_like_regexp": regex,
             "set_severity_Level": set_severity_Level,
             "set_issue_details": set_issue_details,
             "set_issue_expected": set_issue_expected,
@@ -163,7 +167,7 @@ class Catenate(KeywordCallGenerator):
     name: str = "Catenate"
 
     def __init__(
-        self, assign_to_variable=False, variable="", kwargs={}, args=[]
+        self, assign_to_variable=False, variable="", kwargs={}, args: List =[]
     ) -> None:
         super().__init__(assign_to_variable, variable)
         self.args = args
