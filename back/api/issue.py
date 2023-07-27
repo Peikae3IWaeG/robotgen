@@ -2,9 +2,12 @@ from generator.model.sections import TaskSectionGenerator
 from generator.model.keywords import RwCliParseCliOutputByLine
 
 from flask_restx import Resource, fields, api, Namespace, OrderedModel
-from typing import List
+from typing import List, Dict
+from os import getenv
+import requests
 
 from api.variable import DataResource as SResource
+from api.command import DataResource as CResource
 
 
 api = Namespace("issue", description="issue related operations")
@@ -17,13 +20,23 @@ stdout_assertion = api.model(
 issue = api.model(
     "issue",
     {
-        "name": fields.String,
         "severity": fields.Integer,
+        "regex": fields.String,
         "response": fields.String,
         "description": fields.String,
         "assertions": fields.List(fields.Nested(stdout_assertion)),
     },
 )
+
+
+def generate_chatgpt_description(input):
+    url = getenv("SIMULATE_ENDPOINT")
+    querystring = {
+        "prompt": "Create negation of the following sentence: {}".format(input)
+    }
+    response = requests.request("GET", url, params=querystring)
+    gpt_explanation = response.json()["explanation"]
+    return gpt_explanation.lstrip()
 
 
 class stdoutAssertion(object):
@@ -45,6 +58,15 @@ class IssueResource(object):
         variable = data
         self.issues.append(variable)
 
+    def drop(self) -> None:
+        self.issues = []
+
+    def __get_command_regex(self, name):
+        regex = CResource.get_command_by_name(name)["regex"]
+        if regex != "":
+            return "${{{}}}".format(regex)
+        return regex
+
     def dump(self) -> TaskSectionGenerator:
         if len(self.issues) > 0:
             body = []
@@ -64,11 +86,17 @@ class IssueResource(object):
                     dict_kwargs[
                         "{}_{}".format(assertion["target"], assertion["condition"])
                     ] = assertion["value"]
+
                 body.append(
                     RwCliParseCliOutputByLine(
-                        assign_to_variable=True,
-                        variable=issue["name"],
-                        rsp=issue["response"],
+                        assign_to_variable=False,
+                        regex=self.__get_command_regex(issue["response"]),
+                        rsp="${{{}}}".format(issue["response"]),
+                        set_issue_expected=issue["description"],
+                        set_issue_details="More details available here \\n\\n $_stdout \\n\\n ",
+                        set_issue_actual=generate_chatgpt_description(
+                            issue["description"]
+                        ),
                         extra_kwargs=dict_kwargs,
                     )
                 )
