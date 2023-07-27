@@ -1,7 +1,11 @@
 from generator.model.robot import RobotGenerator
 
 from generator.model.sections import TaskSectionGenerator
-from generator.model.statements import TaskStatementGenerator, TaskDocumentationGenerator, TaskTagGenerator
+from generator.model.statements import (
+    TaskStatementGenerator,
+    TaskDocumentationGenerator,
+    TaskTagGenerator,
+)
 
 from flask_restx import Resource, fields, api, Namespace
 
@@ -27,7 +31,9 @@ class RobotDump(Resource):
         robot_generator = RobotGenerator()
 
         new_task_section = TaskSectionGenerator()
-        new_task_section.add(TaskStatementGenerator("Test task for running all commands"))
+        new_task_section.add(
+            TaskStatementGenerator("Test task for running all commands")
+        )
         new_task_section.add(TaskDocumentationGenerator("Documentation placeholder"))
         new_task_section.add(TaskTagGenerator("some example tags"))
         [new_task_section.add(x) for x in CommandDataResource.dump()]
@@ -38,6 +44,7 @@ class RobotDump(Resource):
         robot_generator.add(new_task_section)
         robot_generator.add(keywords_section)
         return robot_generator.dump()
+
 
 @api.route("/drop")
 class RobotDump(Resource):

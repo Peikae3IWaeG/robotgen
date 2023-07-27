@@ -60,7 +60,8 @@ class TaskDocumentationGenerator(StatementGenerator):
                 Token(Token.EOL, "\n"),
             ]
         )
-        
+
+
 class TaskTagGenerator(StatementGenerator):
     value: str
 

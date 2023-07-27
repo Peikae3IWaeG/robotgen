@@ -4,6 +4,7 @@ from robot.parsing.model.statements import KeywordCall
 from robot.parsing.lexer.tokens import Token
 from typing import List
 
+
 def flatten(l):
     return [item for sublist in l for item in sublist]
 
@@ -126,8 +127,6 @@ class RwCliRunCli(KeywordCallGenerator):
         }
 
 
-
-
 class RwCliParseCliOutputByLine(KeywordCallGenerator):
     name: str = "RW.CLI.Parse Cli Output By Line"
 
@@ -167,7 +166,7 @@ class Catenate(KeywordCallGenerator):
     name: str = "Catenate"
 
     def __init__(
-        self, assign_to_variable=False, variable="", kwargs={}, args: List =[]
+        self, assign_to_variable=False, variable="", kwargs={}, args: List = []
     ) -> None:
         super().__init__(assign_to_variable, variable)
         self.args = args
