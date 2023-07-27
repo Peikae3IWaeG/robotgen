@@ -20,10 +20,12 @@ variable = api.model(
     },
 )
 
-
 class VariableResource(object):
     def __init__(self) -> None:
         self.variables: List(OrderedModel) = []
+
+    def drop(self) -> None:
+        self.variables = []
 
     def add(self, data) -> None:
         variable = data
@@ -51,7 +53,6 @@ class VariableResource(object):
 
 
 DataResource = VariableResource()
-
 
 @api.route("/")
 class VarList(Resource):
