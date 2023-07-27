@@ -60,6 +60,22 @@ class TaskDocumentationGenerator(StatementGenerator):
                 Token(Token.EOL, "\n"),
             ]
         )
+        
+class TaskTagGenerator(StatementGenerator):
+    value: str
+
+    def __init__(self, value) -> None:
+        super().__init__()
+        self.value = value
+        self.statement = Documentation.from_tokens(
+            tokens=[
+                Token(Token.SEPARATOR, "    "),
+                Token(Token.DOCUMENTATION, "[Tags]"),
+                Token(Token.SEPARATOR, "       "),
+                Token(Token.ARGUMENT, self.value),
+                Token(Token.EOL, "\n"),
+            ]
+        )
 
 
 class DocumentationStatementGenerator(StatementGenerator):
