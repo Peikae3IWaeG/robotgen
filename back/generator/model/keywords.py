@@ -42,16 +42,17 @@ class KeywordCallGenerator(Component):
 
     def _kwargs_generator(self) -> list:
         generated_list = []
-        for x in self.kwargs.keys():
-            generated_list.append(
-                [
-                    Token(Token.SEPARATOR, "    "),
-                    Token(Token.CONTINUATION, "..."),
-                    Token(Token.SEPARATOR, "    "),
-                    Token(Token.ARGUMENT, "{}={}".format(x, self.kwargs[x])),
-                    Token(Token.EOL, self.eol),
-                ]
-            )
+        for key, value in self.kwargs.items():
+            if value != "":
+                generated_list.append(
+                    [
+                        Token(Token.SEPARATOR, "    "),
+                        Token(Token.CONTINUATION, "..."),
+                        Token(Token.SEPARATOR, "    "),
+                        Token(Token.ARGUMENT, "{}={}".format(key, value)),
+                        Token(Token.EOL, self.eol),
+                    ]
+                )
         return flatten(generated_list)
 
     def dump(self) -> KeywordCall:
@@ -100,6 +101,26 @@ class RWCoreImportUserVariable(KeywordCallGenerator):
         }
 
 
+class RWCoreImportService(KeywordCallGenerator):
+    name: str = "RW.Core.Import Service"
+
+    def __init__(
+        self,
+        assign_to_variable=True,
+        name="",
+        example: str = "",
+        description: str = "description",
+        default: str = "",
+    ) -> None:
+        super().__init__(assign_to_variable, name)
+        self.kwargs = {
+            "name": name,
+            "description": description,
+            "example": example,
+            "default": default,
+        }
+
+
 class RWCoreImportUserSecret(RWCoreImportUserVariable):
     name: str = "RW.Core.Import User Secret"
 
@@ -115,7 +136,7 @@ class RwCliRunCli(KeywordCallGenerator):
         render_in_commandlist: bool = True,
         target_service: any = "${kubectl}",
         secret_file__kubeconfig: any = "${kubeconfig}",
-        env: any = None,
+        env: any = "${env}",
     ) -> None:
         super().__init__(assign_to_variable, variable)
         self.kwargs = {

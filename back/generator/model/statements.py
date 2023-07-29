@@ -1,37 +1,41 @@
-from .robot import Component
-
-from typing import List
-
+"""" 
+This module contains models for generating statements,
+that are not sections and keywords invocations
+"""
 from robot.parsing.lexer.tokens import Token
-
-
 from robot.parsing.model.statements import (
-    SectionHeader,
     Statement,
     Metadata,
     Documentation,
-    KeywordCall,
 )
 
-
-from robot.parsing.model.blocks import (
-    Section,
-)
+from .robot import Component
 
 
 class StatementGenerator(Component):
-    def dump(self) -> Statement:
-        pass
+    """
+    Component used as a parent for other specific statement components
+
+    Args: todo
+    Methods: todo
+    """
 
     composite: bool = False
     statement: Statement
+    value: str
 
     def dump(self) -> Statement:
         return self.statement
 
 
 class TaskStatementGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate Test Case statement
+    https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#test-case-name-and-documentation
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -46,7 +50,12 @@ class TaskStatementGenerator(StatementGenerator):
 
 
 class TaskDocumentationGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate a Test Case documentation statement
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -63,7 +72,12 @@ class TaskDocumentationGenerator(StatementGenerator):
 
 
 class TaskTagGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate a Test Case tags statement
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -80,7 +94,12 @@ class TaskTagGenerator(StatementGenerator):
 
 
 class DocumentationStatementGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate a Documentation statement
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -97,6 +116,13 @@ class DocumentationStatementGenerator(StatementGenerator):
 
 
 class MetadataStatementGenerator(StatementGenerator):
+    """
+    A class to generate a Metadata key-value statement
+
+    Args: todo
+    Methods: todo
+    """
+
     key: str
     value: str
 
@@ -118,7 +144,12 @@ class MetadataStatementGenerator(StatementGenerator):
 
 
 class LibraryStatementGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate a single Library statement
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -135,6 +166,13 @@ class LibraryStatementGenerator(StatementGenerator):
 
 
 class SuiteSetupGenerator(StatementGenerator):
+    """
+    A class to generate a Suite Setup statement
+
+    Args: todo
+    Methods: todo
+    """
+
     value: str = "Suite Initialization"
 
     def __init__(self) -> None:
@@ -151,6 +189,13 @@ class SuiteSetupGenerator(StatementGenerator):
 
 
 class SuiteInitializationGenerator(StatementGenerator):
+    """
+    A class to generate a Suite Initialization statement
+
+    Args: todo
+    Methods: todo
+    """
+
     value: str = "Suite Initialization"
 
     composite: bool = False
@@ -167,7 +212,12 @@ class SuiteInitializationGenerator(StatementGenerator):
 
 
 class SetSuiteVariableGenerator(StatementGenerator):
-    value: str
+    """
+    A class to generate a Set Suite Variable Statement
+
+    Args: todo
+    Methods: todo
+    """
 
     def __init__(self, value) -> None:
         super().__init__()
@@ -181,6 +231,32 @@ class SetSuiteVariableGenerator(StatementGenerator):
                 Token(Token.ARGUMENT, "${{{}}}".format(value)),
                 Token(Token.SEPARATOR, "    "),
                 Token(Token.ARGUMENT, "${{{}}}".format(value)),
+                Token(Token.EOL, "\n"),
+            ]
+        )
+
+
+class SetEnvVarSuiteVariableGenerator(StatementGenerator):
+    """
+    A class to generate a Set Suite Variable Statement
+
+    Args: todo
+    Methods: todo
+    """
+
+    def __init__(self, name, value) -> None:
+        super().__init__()
+        self.name = name
+        self.value = value
+
+        self.statement = Metadata.from_tokens(
+            tokens=[
+                Token(Token.SEPARATOR, "    "),
+                Token(Token.METADATA, "Set Suite Variable"),
+                Token(Token.SEPARATOR, "             "),
+                Token(Token.ARGUMENT, "${env}"),
+                Token(Token.SEPARATOR, "    "),
+                Token(Token.ARGUMENT, str({name: value})),
                 Token(Token.EOL, "\n"),
             ]
         )

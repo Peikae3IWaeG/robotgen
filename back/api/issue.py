@@ -6,7 +6,7 @@ from typing import List, Dict
 from os import getenv
 import requests
 
-from api.variable import DataResource as SResource
+from api.variable import VariableDataResource as SResource
 from api.command import DataResource as CResource
 
 

@@ -36,7 +36,7 @@ class Component(ABC):
     def generate_section() -> None:
         pass
 
-    def dump() -> None:
+    def dump(self) -> None:
         pass
 
 

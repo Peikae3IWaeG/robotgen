@@ -6,7 +6,7 @@ import re
 from flask_restx import Resource, fields, api, Namespace, OrderedModel
 from typing import List
 
-from api.variable import DataResource as VResource
+from api.variable import VariableDataResource as VResource
 
 import requests
 
