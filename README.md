@@ -1,2 +1,5 @@
-docker build -t robotgen .
-docker run --name robotgen --rm -p 5000:5000 robotgen
+add endpoint in docker-compose.yml
+docker compose up
+
+ui: port 3000
+api: port 5000
