@@ -19,7 +19,7 @@ variable = api.model(
         "pattern": fields.String,
         "example": fields.String,
         "default": fields.String,
-        "secret": fields.Boolean
+        "secret": fields.Boolean(default=False)
     },
 )
 
@@ -55,7 +55,7 @@ class VariableResource(object):
         body = []
         if len(self.variables) > 0:
             for x in self.variables:
-                if x['secret']:
+                if x["secret"]:
                     body.append(
                         RWCoreImportUserSecret(
                             assign_to_variable=True,
