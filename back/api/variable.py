@@ -1,4 +1,4 @@
-from generator.model.keywords import RWCoreImportUserVariable, RWCoreImportService
+from generator.model.keywords import RWCoreImportUserVariable, RWCoreImportService, RWCoreImportUserSecret
 
 from generator.model.statements import (
     SetSuiteVariableGenerator,
@@ -19,6 +19,7 @@ variable = api.model(
         "pattern": fields.String,
         "example": fields.String,
         "default": fields.String,
+        "secret": fields.Boolean
     },
 )
 
@@ -54,15 +55,26 @@ class VariableResource(object):
         body = []
         if len(self.variables) > 0:
             for x in self.variables:
-                body.append(
-                    RWCoreImportUserVariable(
-                        assign_to_variable=True,
-                        variable=x["name"],
-                        example=x["example"],
-                        description=x["description"],
-                        default=x["default"],
+                if x['secret']:
+                    body.append(
+                        RWCoreImportUserSecret(
+                            assign_to_variable=True,
+                            variable=x["name"],
+                            example=x["example"],
+                            description=x["description"],
+                            default=x["default"],
+                        )
                     )
-                )
+                else:
+                    body.append(
+                        RWCoreImportUserVariable(
+                            assign_to_variable=True,
+                            variable=x["name"],
+                            example=x["example"],
+                            description=x["description"],
+                            default=x["default"],
+                        )
+                    )
                 body.append(SetSuiteVariableGenerator(x["name"]))
         return body
 

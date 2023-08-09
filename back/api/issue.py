@@ -23,8 +23,11 @@ issue = api.model(
         "severity": fields.Integer,
         "regex": fields.String,
         "response": fields.String,
-        "description": fields.String,
         "assertions": fields.List(fields.Nested(stdout_assertion)),
+        "issue_details": fields.String,
+        "issue_title": fields.String,
+        "issue_expected": fields.String,
+        "issue_actual": fields.String,
     },
 )
 
@@ -62,9 +65,9 @@ class IssueResource(object):
         self.issues = []
 
     def __get_command_regex(self, name):
-        regex = CResource.get_command_by_name(name)["regex"]
+        regex = CResource.get_command_by_name(name)["name"]
         if regex != "":
-            return "${{{}}}".format(regex)
+            return f"${{{regex}-regex}}"
         return regex
 
     def dump(self) -> TaskSectionGenerator:
@@ -94,14 +97,10 @@ class IssueResource(object):
                         rsp="${{{}}}".format(issue["response"]),
                         set_issue_expected=issue["description"],
                         set_issue_details="More details available here \\n\\n $_stdout \\n\\n ",
-                        set_issue_actual=generate_chatgpt_description(
-                            issue["description"]
-                        ),
+                        set_issue_actual="issue_actual placeholder",
                         extra_kwargs=dict_kwargs,
                     )
                 )
-
-                # [ body.append(IssueAssertions(kwargs=kwarg)) for kwarg in kwargs ]
 
             return body
         return []

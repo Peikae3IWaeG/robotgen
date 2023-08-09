@@ -100,6 +100,28 @@ class RWCoreImportUserVariable(KeywordCallGenerator):
             "default": default,
         }
 
+class RWCoreImportUserSecret(RWCoreImportUserVariable):
+    name: str = "RW.Core.Import User Secret"
+
+    def __init__(
+        self,
+        assign_to_variable=False,
+        variable="",
+        type: str = "string",
+        pattern: str = "\w",
+        example: str = "example",
+        description: str = "description",
+        default: str = "",
+    ) -> None:
+        super().__init__(assign_to_variable, variable)
+        self.kwargs = {
+            "varname": variable,
+            "type": type,
+            "description": description,
+            "pattern": pattern,
+            "example": example,
+            "default": default,
+        }
 
 class RWCoreImportService(KeywordCallGenerator):
     name: str = "RW.Core.Import Service"
