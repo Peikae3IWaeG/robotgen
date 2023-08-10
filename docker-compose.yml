@@ -15,4 +15,4 @@ services:
       - 5000:5000
     environment:
       - SIMULATE_ENDPOINT=
-      
+      - OPENAI_API_KEY=
