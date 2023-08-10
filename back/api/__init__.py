@@ -5,6 +5,8 @@ from .command import api as command_api
 from .settings import api as settings_api
 from .robot import api as robot_api
 from .issue import api as issue_api
+from .gpt import api as gpt_api
+
 
 api = Api(
     title="Robotgen API",
@@ -17,3 +19,4 @@ api.add_namespace(command_api)
 api.add_namespace(settings_api)
 api.add_namespace(robot_api)
 api.add_namespace(issue_api)
+api.add_namespace(gpt_api)
