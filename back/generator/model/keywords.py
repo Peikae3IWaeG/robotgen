@@ -100,6 +100,7 @@ class RWCoreImportUserVariable(KeywordCallGenerator):
             "default": default,
         }
 
+
 class RWCoreImportUserSecret(RWCoreImportUserVariable):
     name: str = "RW.Core.Import User Secret"
 
@@ -122,6 +123,7 @@ class RWCoreImportUserSecret(RWCoreImportUserVariable):
             "example": example,
             "default": default,
         }
+
 
 class RWCoreImportService(KeywordCallGenerator):
     name: str = "RW.Core.Import Service"

@@ -1,4 +1,8 @@
-from generator.model.keywords import RWCoreImportUserVariable, RWCoreImportService, RWCoreImportUserSecret
+from generator.model.keywords import (
+    RWCoreImportUserVariable,
+    RWCoreImportService,
+    RWCoreImportUserSecret,
+)
 
 from generator.model.statements import (
     SetSuiteVariableGenerator,
@@ -19,7 +23,7 @@ variable = api.model(
         "pattern": fields.String,
         "example": fields.String,
         "default": fields.String,
-        "secret": fields.Boolean(default=False)
+        "secret": fields.Boolean(default=False),
     },
 )
 
