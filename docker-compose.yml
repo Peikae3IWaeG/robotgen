@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    volumes:
+    - ./front:/app
   
   backend:
     build:
@@ -13,6 +15,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 5000:5000
-    environment:
-      - SIMULATE_ENDPOINT=
-      - OPENAI_API_KEY=
+    env_file:
+      - .env
+    volumes:
+      - ./back:/app

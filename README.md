@@ -1,5 +1,9 @@
-add endpoint in docker-compose.yml
-docker compose up
+* cp .env.example .env
+* update .env file
+* docker compose up
 
-ui: port 3000
-api: port 5000
+ui: 
+* port 3000
+* tested only on 1920x1080px resolution
+api:
+* port 5000
