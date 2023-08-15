@@ -9,7 +9,7 @@ const KubectlPreparer = () => {
   const handleApiRequests = () => {
     const requestDataList = [
       {
-        endpoint: "http://localhost:5000/variables/robot",
+        endpoint: "http://localhost:5000/variables/robot/secret",
         payload: {
           name: "kubeconfig",
           description:
