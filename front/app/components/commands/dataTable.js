@@ -9,11 +9,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const CommandDataTable = () => {
+const CommandTable = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
     fetch("http://localhost:5000/command")
       .then((response) => response.json())
       .then((data) => setApiData(data))
@@ -50,4 +49,4 @@ const CommandDataTable = () => {
   );
 };
 
-export default CommandDataTable;
+export default CommandTable;

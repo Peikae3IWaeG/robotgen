@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -21,7 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const UploadIssue = () => {
+const IssueForm = () => {
   const [issueData, setIssueData] = useState({
     severity: 1,
     response: "-",
@@ -251,7 +250,7 @@ const UploadIssue = () => {
 
             <TextField
               fullWidth
-              placeholder="Enter prompt here"
+              placeholder="PLACEHOLDER"
               multiline
               rows={14}
             />
@@ -268,4 +267,4 @@ const UploadIssue = () => {
   );
 };
 
-export default UploadIssue;
+export default IssueForm;

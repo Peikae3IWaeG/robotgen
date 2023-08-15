@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 
-const IssueDataTable = () => {
+const IssueTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Replace 'API_ENDPOINT' with the actual endpoint URL for your GET request
     fetch("http://localhost:5000/issue")
       .then((response) => {
         if (!response.ok) {
@@ -22,7 +21,6 @@ const IssueDataTable = () => {
       });
   }, []);
 
-  // Helper function to render the nested assertions
   const renderAssertions = (assertions) => {
     return assertions.map((assertion, index) => (
       <tr key={index}>
@@ -74,4 +72,4 @@ const IssueDataTable = () => {
   );
 };
 
-export default IssueDataTable;
+export default IssueTable;

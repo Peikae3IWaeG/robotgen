@@ -9,12 +9,11 @@ const DropdownForm = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Function to fetch data from the API
     const fetchItems = async () => {
       try {
-        const response = await fetch("http://localhost:5000/command"); // Replace with your API endpoint
+        const response = await fetch("http://localhost:5000/command");
         const data = await response.json();
-        setItems(data); // Assuming the response is an array of items
+        setItems(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching items:", error);

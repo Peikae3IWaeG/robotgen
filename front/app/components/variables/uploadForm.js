@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 
-const AddEntryForm = () => {
+const VariablesForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -28,7 +28,7 @@ const AddEntryForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:5000/variables/robot", {
+    fetch("http://localhost:5000/variables/robot/plain", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -98,13 +98,6 @@ const AddEntryForm = () => {
             label="default"
             variant="standard"
           />
-          <Checkbox
-            name="secret"
-            checked={formData.secret}
-            onChange={handleInputChange}
-            color="primary"
-          />
-          <label htmlFor="secret">Secret</label>
           <Box justify="flex-end" textAlign="center">
             <br />
             <Button variant="contained" type="submit">
@@ -117,4 +110,4 @@ const AddEntryForm = () => {
   );
 };
 
-export default AddEntryForm;
+export default VariablesForm;

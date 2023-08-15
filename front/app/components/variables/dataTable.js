@@ -9,12 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const ApiDataTable = () => {
+const VariablesTable = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
     // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
-    fetch("http://localhost:5000/variables/robot")
+    fetch("http://localhost:5000/variables/robot/plain")
       .then((response) => response.json())
       .then((data) => setApiData(data))
       .catch((error) => console.error("Error fetching API data:", error));
@@ -54,4 +54,4 @@ const ApiDataTable = () => {
   );
 };
 
-export default ApiDataTable;
+export default VariablesTable;

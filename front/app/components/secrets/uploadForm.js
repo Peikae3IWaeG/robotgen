@@ -102,7 +102,7 @@ const SecretsForm = () => {
             <br />
             <Button variant="contained" type="submit">
               Add Secret
-            </Button> 
+            </Button>
           </Box>
         </form>
       </FormControl>

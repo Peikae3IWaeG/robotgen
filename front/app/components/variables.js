@@ -13,7 +13,6 @@ const ApiDataTable = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
     fetch("http://localhost:5000/variables")
       .then((response) => response.json())
       .then((data) => setApiData(data))

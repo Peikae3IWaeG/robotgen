@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 
 const KubectlPreparer = () => {
   const [apiResponses, setApiResponses] = useState([]);
-  const apiEndpoint = "http://localhost:5000/variables/"; // Replace this with your API endpoint
+  const apiEndpoint = "http://localhost:5000/variables/";
 
   const handleApiRequests = () => {
     const requestDataList = [
@@ -18,7 +18,7 @@ const KubectlPreparer = () => {
           example:
             "For examples, start here https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/",
           default: "",
-          secret: false,
+          secret: true,
         },
       },
       {
@@ -43,7 +43,7 @@ const KubectlPreparer = () => {
 
     const promises = requestDataList.map((requestData) => {
       return fetch(requestData.endpoint, {
-        method: "POST", // Change this to 'GET', 'PUT', 'DELETE', etc. if needed
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

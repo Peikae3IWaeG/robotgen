@@ -2,10 +2,8 @@
 
 import React, { useState } from "react";
 import { Box } from "@mui/material";
-import Input from "@mui/material/Input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Toolbar from "@mui/material";
 
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -18,14 +16,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const AddTask = () => {
+const CommandForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     command: "",
     regex: "",
   });
 
-  const [outputData, setOutputData] = useState(null); // New state variable to hold the output data
+  const [outputData, setOutputData] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -84,7 +82,7 @@ const AddTask = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setOutputData(data); // Update the state with the response data
+        setOutputData(data);
       })
       .catch((error) => console.error("Error adding entry:", error));
   };
@@ -159,4 +157,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default CommandForm;
