@@ -82,6 +82,10 @@ class VariableResource(object):
                 body.append(SetSuiteVariableGenerator(x["name"]))
         return body
 
+    def dump_secret_variables(self) -> List: 
+       return [x for x in self.variables if x['secret'] == True]
+    def dump_plain_variables(self) -> List: 
+       return [x for x in self.variables if x['secret'] == False]
 
 class ServiceImportResource(object):
     def __init__(self) -> None:
@@ -135,13 +139,28 @@ EnvironmentVariableDataResource = EnvironmentVariableResource()
 ServiceImportDataResource = ServiceImportResource()
 
 
-@api.route("/robot")
+@api.route("/robot/plain")
 class VarList(Resource):
     @api.doc("list_vars")
     @api.marshal_list_with(variable)
     def get(self):
         """List all vars"""
-        return VariableDataResource.variables
+        return VariableDataResource.dump_plain_variables()
+
+    @api.doc("add_var")
+    @api.expect(variable)
+    @api.marshal_list_with(variable)
+    def post(self):
+        """Add variable"""
+        VariableDataResource.add(api.payload), 201
+        
+@api.route("/robot/secret")
+class SecretList(Resource):
+    @api.doc("list_secrets")
+    @api.marshal_list_with(variable)
+    def get(self):
+        """List all secrets"""
+        return VariableDataResource.dump_secret_variables()
 
     @api.doc("add_var")
     @api.expect(variable)
