@@ -11,7 +11,7 @@ from .gpt import api as gpt_api
 api = Api(
     title="Robotgen API",
     version="1.0",
-    description="Ass",
+    description="Robotgen API",
 )
 
 api.add_namespace(variable_api)
