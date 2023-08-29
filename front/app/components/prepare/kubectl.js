@@ -69,7 +69,7 @@ const KubectlPreparer = () => {
   return (
     <div>
       <Button variant="contained" onClick={handleApiRequests}>
-        Load kubectl preset
+       Add In Kubectl Presets
       </Button>
       <div>
         {apiResponses.map((response, index) => (

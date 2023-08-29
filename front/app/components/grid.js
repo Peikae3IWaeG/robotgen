@@ -40,7 +40,7 @@ export default function MyGrid(props) {
         <Grid item m={1} xs={5}>
           <Stack spacing={2}>
             <Item>
-              <h2>Misc</h2>
+              <h2>Miscellaneous Actions</h2>
 
               <Grid container spacing={2}>
                 <Grid item m={1} xs={2}>
