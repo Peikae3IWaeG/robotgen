@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-    - ./front:/app
+    - ./front/app:/app/app
   
   backend:
     build:
