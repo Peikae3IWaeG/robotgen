@@ -51,6 +51,9 @@ class VariableResource(object):
     def drop(self) -> None:
         self.variables = []
 
+    def delete_by_name(self, name) -> None:
+        self.variables = [x for x in self.variables if x["name"] != name]
+
     def add(self, data) -> None:
         variable = data
         self.variables.append(variable)
@@ -82,10 +85,12 @@ class VariableResource(object):
                 body.append(SetSuiteVariableGenerator(x["name"]))
         return body
 
-    def dump_secret_variables(self) -> List: 
-       return [x for x in self.variables if x['secret'] == True]
-    def dump_plain_variables(self) -> List: 
-       return [x for x in self.variables if x['secret'] == False]
+    def dump_secret_variables(self) -> List:
+        return [x for x in self.variables if x["secret"] == True]
+
+    def dump_plain_variables(self) -> List:
+        return [x for x in self.variables if x["secret"] == False]
+
 
 class ServiceImportResource(object):
     def __init__(self) -> None:
@@ -153,7 +158,15 @@ class VarList(Resource):
     def post(self):
         """Add variable"""
         VariableDataResource.add(api.payload), 201
-        
+
+    @api.doc("del_var")
+    @api.expect(variable)
+    @api.marshal_with(variable)
+    def delete(self):
+        """Delete variable"""
+        VariableDataResource.delete_by_name(api.payload["name"]), 201
+
+
 @api.route("/robot/secret")
 class SecretList(Resource):
     @api.doc("list_secrets")
@@ -162,12 +175,19 @@ class SecretList(Resource):
         """List all secrets"""
         return VariableDataResource.dump_secret_variables()
 
-    @api.doc("add_var")
+    @api.doc("add_secret")
     @api.expect(variable)
     @api.marshal_list_with(variable)
     def post(self):
-        """Add variable"""
+        """Add secret"""
         VariableDataResource.add(api.payload), 201
+
+    @api.doc("del_secret")
+    @api.expect(variable)
+    @api.marshal_with(variable)
+    def delete(self):
+        """Delete secret"""
+        VariableDataResource.delete_by_name(api.payload["name"]), 201
 
 
 @api.route("/env")

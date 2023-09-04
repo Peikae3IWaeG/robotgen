@@ -25,6 +25,9 @@ class CommandResource(object):
     def drop(self) -> None:
         self.commands = []
 
+    def delete_by_name(self, name) -> None:
+        self.commands = [x for x in self.commands if x["name"] != name]
+
     def get_command_by_name(self, name) -> OrderedModel:
         return [x for x in self.commands if x["name"] == name][0]
 
@@ -78,6 +81,12 @@ class VarList(Resource):
         """Add command"""
         DataResource.add(api.payload), 201
 
+    @api.doc("delete_commands")
+    @api.expect(command)
+    def delete(self):
+        """Delete command"""
+        DataResource.delete_by_name(api.payload["name"]), 201
+
 
 @api.route("/simulate")
 class VarList(Resource):
@@ -115,8 +124,3 @@ class VarList(Resource):
             "regex_numbered_explanation": regex_numbered_explanation,
             "regex_named_explanation": regex_named_explanation,
         }
-
-        # print(regexp_results.groups())
-
-        # print(result)
-        return result

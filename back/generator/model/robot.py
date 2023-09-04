@@ -40,8 +40,21 @@ class Component(ABC):
         pass
 
 
+class RobotGenerators(Component):
+    composite: bool = True
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._children: List(RobotGenerator) = []
+
+    def add(self, component: Component) -> None:
+        self._children.append(component)
+        component.parent = self
+
+
 class RobotGenerator(Component):
     composite: bool = True
+    name: str = "Default Task"
 
     def __init__(self) -> None:
         self._children: List(Component) = []

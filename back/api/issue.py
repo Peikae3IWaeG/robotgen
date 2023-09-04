@@ -20,6 +20,7 @@ stdout_assertion = api.model(
 issue = api.model(
     "issue",
     {
+        "id": fields.Integer,
         "severity": fields.Integer,
         "regex": fields.String,
         "response": fields.String,
@@ -59,10 +60,14 @@ class IssueResource(object):
 
     def add(self, data) -> None:
         variable = data
+        variable["id"] = id(variable)
         self.issues.append(variable)
 
     def drop(self) -> None:
         self.issues = []
+
+    def delete(self, id) -> None:
+        self.issues = [x for x in self.issues if x["id"] != id]
 
     def __get_command_regex(self, name):
         regex = CResource.get_command_by_name(name)["name"]
@@ -111,16 +116,23 @@ DataResource = IssueResource()
 
 @api.route("/")
 class VarList(Resource):
-    @api.doc("list_command")
+    @api.doc("get_all_issues")
     @api.marshal_list_with(issue)
     def get(self):
-        """List issues"""
+        """Get all issues"""
         print(SResource.variables)
         return DataResource.issues
 
-    @api.doc("add_issues")
+    @api.doc("add_issue")
     @api.expect(issue)
     @api.marshal_list_with(issue)
     def post(self):
         """Add issue"""
         DataResource.add(api.payload), 201
+
+    @api.doc("del_issue")
+    @api.expect(issue)
+    def delete(self):
+        """Delete issue by id"""
+        print(api.payload)
+        DataResource.delete(api.payload["id"]), 201

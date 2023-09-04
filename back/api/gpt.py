@@ -179,10 +179,16 @@ class RobotDump(Resource):
     @api.expect(gpt_request)
     def post(self):
         """Simulate command output"""
-        sim = GPTSimulator(user=api.payload["text"])
-        sim.temperature = api.payload["temperature"]
-
-        return sim.generate_response()
+        sim = GPTSimulator(user=api.payload["command"])
+        sim.temperature = 0.3
+        result = {
+            "gpt_explanation": sim.generate_response()["choices"][0]["message"][
+                "content"
+            ],
+            "regex_numbered_explanation": "",
+            "regex_named_explanation": "",
+        }
+        return result
 
 
 @api.route("/regex_by_text")
@@ -192,7 +198,7 @@ class RobotDump(Resource):
     def post(self):
         """Generate regex based on the command output"""
         sim = GPTRegex(user=api.payload["text"])
-        sim.temperature = api.payload["temperature"]
+        sim.temperature = 0.2
 
         return sim.generate_response()
 

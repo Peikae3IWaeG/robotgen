@@ -1,3 +1,5 @@
+from typing import List
+import logging
 from generator.model.robot import RobotGenerator
 
 from generator.model.sections import TaskSectionGenerator, KeywordsSectionGenerator
@@ -16,14 +18,24 @@ from api.variable import EnvironmentVariableDataResource
 
 from api.issue import DataResource as IssueDataResource
 
+from generator.model.robot import RobotGenerators
+
 api = Namespace("robot", description="Robot related operations")
 
 robot = api.model(
     "Robot",
     {
-        "placeholder": fields.String,
+        "name": fields.String,
     },
 )
+
+
+class RobotsResource:
+    def __init__(self) -> None:
+        self.robots: List(RobotGenerators) = []
+
+
+robot_generator = RobotGenerator()
 
 
 @api.route("/")
@@ -31,12 +43,9 @@ class RobotDump(Resource):
     @api.doc("dump_robot")
     def get(self):
         """Dump generated robot section"""
-        robot_generator = RobotGenerator()
 
         new_task_section = TaskSectionGenerator()
-        new_task_section.add(
-            TaskStatementGenerator("Test task for running all commands")
-        )
+        new_task_section.add(TaskStatementGenerator(robot_generator.name))
         new_task_section.add(TaskDocumentationGenerator("Documentation placeholder"))
         new_task_section.add(TaskTagGenerator("some example tags"))
         [new_task_section.add(x) for x in CommandDataResource.dump()]
@@ -49,7 +58,9 @@ class RobotDump(Resource):
 
         robot_generator.add(new_task_section)
         robot_generator.add(new_keyword_section)
-        return robot_generator.dump()
+        dumped_robot = robot_generator.dump()
+        robot_generator._children = []  # temp hack to avoid rewriting
+        return dumped_robot
 
 
 @api.route("/drop")
@@ -62,4 +73,15 @@ class RobotDrop(Resource):
         VariableDataResource.drop()
         EnvironmentVariableDataResource.drop()
         ServiceImportDataResource.drop()
+        robot_generator.robots = []
+        return "ok", 201
+
+
+@api.route("/name")
+class RobotDrop(Resource):
+    @api.expect(robot)
+    @api.doc("name")
+    def post(self):
+        """Set name"""
+        robot_generator.name = api.payload["name"]
         return "ok", 201
