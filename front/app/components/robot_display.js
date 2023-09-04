@@ -59,6 +59,21 @@ const RobotDataDisplay = () => {
       </IconButton>
 
       <pre>{apiData}</pre>
+      <IconButton
+        onClick={() => navigator.clipboard.writeText(apiData)}
+        aria-label="delete"
+      >
+        {" "}
+        <ContentCopyIcon /> Copy{" "}
+      </IconButton>
+      <IconButton
+        sx={{ marginRight: "auto" }}
+        onClick={() => handleDrop()}
+        aria-label="delete"
+      >
+        {" "}
+        <DeleteIcon /> Reset{" "}
+      </IconButton>
     </div>
   );
 };
