@@ -33,27 +33,6 @@ const CommandForm = () => {
     });
   };
 
-  const handleSubmitRegex = (event) => {
-    fetch("http://localhost:5000/command/regex", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Entry added successfully:", data);
-      })
-      .catch((error) => console.error("Error adding entry:", error));
-
-    setFormData({
-      name: "",
-      command: "",
-      regex: "",
-    });
-  };
-
   const handleSubmit = (addevent) => {
     addevent.preventDefault();
     fetch("http://localhost:5000/command/", {
@@ -73,7 +52,7 @@ const CommandForm = () => {
 
   const handleSubmitGpt = (simevent) => {
     simevent.preventDefault();
-    fetch("http://localhost:5000/command/simulate", {
+    fetch("http://localhost:5000/gpt/simulate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

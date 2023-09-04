@@ -15,7 +15,8 @@ import RobotDataDisplay from "./components/robot_display";
 import MyGrid from "./components/grid";
 
 import KubectlPreparer from "./components/prepare/kubectl";
-import ResetRobot from "./components/robot/reset";
+import GcloudPreparer from "./components/prepare/gcloud";
+import CurlPreparer from "./components/prepare/curl";
 
 export default function Home() {
   const secretsTable = <SecretsTable></SecretsTable>;
@@ -33,7 +34,8 @@ export default function Home() {
   const robotDataDisplay = <RobotDataDisplay></RobotDataDisplay>;
 
   const prepareKubectl = <KubectlPreparer></KubectlPreparer>;
-  const resetRobot = <ResetRobot></ResetRobot>;
+  const prepareGcloud = <GcloudPreparer></GcloudPreparer>;
+  const prepareCurl = <CurlPreparer></CurlPreparer>;
 
   return (
     <main>
@@ -48,7 +50,8 @@ export default function Home() {
         commandTable={commandTable}
         robotDataDisplay={robotDataDisplay}
         prepareKubectl={prepareKubectl}
-        resetRobot={resetRobot}
+        prepareGcloud={prepareGcloud}
+        prepareCurl={prepareCurl}
       ></MyGrid>
     </main>
   );

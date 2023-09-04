@@ -9,32 +9,12 @@ const KubectlPreparer = () => {
   const handleApiRequests = () => {
     const requestDataList = [
       {
-        endpoint: "http://localhost:5000/variables/robot/secret",
-        payload: {
-          name: "kubeconfig",
-          description:
-            "The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s).",
-          pattern: "\\w",
-          example:
-            "For examples, start here https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/",
-          default: "",
-          secret: true,
-        },
-      },
-      {
         endpoint: "http://localhost:5000/variables/service",
         payload: {
           name: "kubectl",
           description: "The location service used to interpret shell commands.",
-          example: "kubectl-service.shared",
-          default: "kubectl-service.shared",
-        },
-      },
-      {
-        endpoint: "http://localhost:5000/variables/env",
-        payload: {
-          name: "KUBECONFIG",
-          value: "./${kubeconfig.key}",
+          example: "curl-service.shared",
+          default: "curl-service.shared",
         },
       },
     ];
@@ -69,7 +49,7 @@ const KubectlPreparer = () => {
   return (
     <div>
       <Button variant="contained" onClick={handleApiRequests}>
-        Add in Kubectl preset
+        Add In Curl Presets
       </Button>
       <div>
         {apiResponses.map((response, index) => (

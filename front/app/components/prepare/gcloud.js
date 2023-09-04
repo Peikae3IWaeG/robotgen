@@ -11,30 +11,35 @@ const KubectlPreparer = () => {
       {
         endpoint: "http://localhost:5000/variables/robot/secret",
         payload: {
-          name: "kubeconfig",
+          name: "gcp_credentials_json",
           description:
-            "The kubernetes kubeconfig yaml containing connection configuration used to connect to cluster(s).",
+            "GCP service account json used to authenticate with GCP APIs.",
           pattern: "\\w",
-          example:
-            "For examples, start here https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/",
           default: "",
+          example:
+            '{"type": "service_account","project_id":"myproject-ID", ... super secret stuff ...}',
           secret: true,
+        },
+      },
+      {
+        endpoint: "http://localhost:5000/variables/robot/plain",
+        payload: {
+          name: "GCP_PROJECT_ID",
+          description: "The GCP Project ID to scope the API to",
+          pattern: "\\w",
+          default: "",
+          example: "myproject-ID",
+          secret: false,
         },
       },
       {
         endpoint: "http://localhost:5000/variables/service",
         payload: {
-          name: "kubectl",
-          description: "The location service used to interpret shell commands.",
-          example: "kubectl-service.shared",
-          default: "kubectl-service.shared",
-        },
-      },
-      {
-        endpoint: "http://localhost:5000/variables/env",
-        payload: {
-          name: "KUBECONFIG",
-          value: "./${kubeconfig.key}",
+          name: "gcloud",
+          description:
+            "The selected RunWhen Service to use for accessing services within a network.",
+          example: "gcloud-service.shared",
+          default: "gcloud-service.shared",
         },
       },
     ];
@@ -69,7 +74,7 @@ const KubectlPreparer = () => {
   return (
     <div>
       <Button variant="contained" onClick={handleApiRequests}>
-        Add in Kubectl preset
+        Add In GCloud Presets
       </Button>
       <div>
         {apiResponses.map((response, index) => (

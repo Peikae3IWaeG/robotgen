@@ -13,6 +13,8 @@ import { ExpandMore } from "@mui/icons-material";
 
 import Item from "./paperitem";
 
+import ObjectiveForm from "../components/objective";
+
 export default function MyGrid(props) {
   const {
     secretsTable,
@@ -25,6 +27,8 @@ export default function MyGrid(props) {
     commandTable,
     robotDataDisplay,
     prepareKubectl,
+    prepareCurl,
+    prepareGcloud,
     resetRobot,
   } = props;
 
@@ -40,14 +44,19 @@ export default function MyGrid(props) {
         <Grid item m={1} xs={5}>
           <Stack spacing={2}>
             <Item>
-              <h2>Misc</h2>
+              <ObjectiveForm></ObjectiveForm>
+              <hr></hr>
+              <h2>Miscellaneous Actions</h2>
 
               <Grid container spacing={2}>
                 <Grid item m={1} xs={2}>
-                  {resetRobot}
+                  {prepareKubectl}
                 </Grid>
                 <Grid item m={1} xs={2}>
-                  {prepareKubectl}
+                  {prepareGcloud}
+                </Grid>
+                <Grid item m={1} xs={2}>
+                  {prepareCurl}
                 </Grid>
               </Grid>
             </Item>

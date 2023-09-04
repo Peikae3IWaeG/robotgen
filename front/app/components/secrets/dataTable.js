@@ -8,6 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 
 const SecretsTable = () => {
   const [secretsApiData, setSecretsApiData] = useState([]);
@@ -19,6 +20,21 @@ const SecretsTable = () => {
       .catch((error) => console.error("Error fetching API data:", error));
   }, []);
 
+  const handleDelete = (name) => {
+    fetch("http://localhost:5000/variables/robot/secret", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: name }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Row deleted successfully.");
+        window.location.reload();
+      })
+      .catch((error) => console.error("Error deleting row:", error));
+  };
   return (
     <div>
       <TableContainer component={Paper}>
@@ -29,6 +45,7 @@ const SecretsTable = () => {
               <TableCell align="right">Description</TableCell>
               <TableCell align="right">Pattern</TableCell>
               <TableCell align="right">Example </TableCell>
+              <TableCell align="right">Action </TableCell>
             </TableRow>
           </TableHead>
 
@@ -44,6 +61,11 @@ const SecretsTable = () => {
                 <TableCell align="right">{item.description}</TableCell>
                 <TableCell align="right">{item.pattern}</TableCell>
                 <TableCell align="right">{item.example}</TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => handleDelete(item.name)}>
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
