@@ -115,6 +115,7 @@ class ServiceImportResource(object):
                         default=x["default"],
                     )
                 )
+                body.append(SetSuiteVariableGenerator(x["name"]))
         return body
 
 

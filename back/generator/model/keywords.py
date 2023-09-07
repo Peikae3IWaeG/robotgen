@@ -138,7 +138,7 @@ class RWCoreImportService(KeywordCallGenerator):
     ) -> None:
         super().__init__(assign_to_variable, name)
         self.kwargs = {
-            "name": name,
+            "varname": name,
             "description": description,
             "example": example,
             "default": default,

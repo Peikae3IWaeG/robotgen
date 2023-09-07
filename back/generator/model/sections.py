@@ -1,4 +1,5 @@
 from .robot import Component
+from .statements import KeywordSuiteInitialization
 
 from typing import List
 
@@ -41,6 +42,7 @@ class KeywordsSectionGenerator(SectionGenerator):
 
     def __init__(self) -> None:
         super().__init__()
+        self.add(KeywordSuiteInitialization())
 
 
 class TaskSectionGenerator(SectionGenerator):

@@ -1,5 +1,10 @@
 from generator.model.sections import SettingsSectionGenerator
-from generator.model.statements import DocumentationStatementGenerator
+from generator.model.statements import (
+    DocumentationStatementGenerator,
+    AuthorStatementGenerator,
+    LibraryStatementGenerator,
+    SuiteSetupGenerator,
+)
 from flask_restx import Resource, fields, api, Namespace, OrderedModel
 
 
@@ -19,15 +24,24 @@ settings = api.model(
 class SettingsResource(object):
     content: OrderedModel
 
+    libraries = ["BuiltIn", "RW.Core", "RW.platform", "OperatingSystem", "RW.CLI"]
+
     def __init__(self) -> None:
         pass
+
+    def __generate_libraries(self):
+        return [LibraryStatementGenerator(lib) for lib in self.libraries]
 
     def set(self, data) -> None:
         self.content = data
 
-    def dump(self) -> str:
-        section = SettingsSectionGenerator()
-        section.add(DocumentationStatementGenerator(self.docs))
+    def dump(self):
+        body = [
+            DocumentationStatementGenerator("Documentation placeholder"),
+            AuthorStatementGenerator("Author placeholder"),
+            SuiteSetupGenerator(),
+        ] + self.__generate_libraries()
+        return body
 
 
 DataResource = SettingsResource()

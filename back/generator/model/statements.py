@@ -115,6 +115,28 @@ class DocumentationStatementGenerator(StatementGenerator):
         )
 
 
+class AuthorStatementGenerator(StatementGenerator):
+    """
+    A class to generate a Documentation statement
+
+    Args: todo
+    Methods: todo
+    """
+
+    def __init__(self, value) -> None:
+        super().__init__()
+        self.value = value
+
+        self.statement = Documentation.from_tokens(
+            tokens=[
+                Token(Token.DOCUMENTATION, "Author"),
+                Token(Token.SEPARATOR, "       "),
+                Token(Token.ARGUMENT, self.value),
+                Token(Token.EOL, "\n"),
+            ]
+        )
+
+
 class MetadataStatementGenerator(StatementGenerator):
     """
     A class to generate a Metadata key-value statement
@@ -183,6 +205,27 @@ class SuiteSetupGenerator(StatementGenerator):
                 Token(Token.METADATA, "Suite Setup"),
                 Token(Token.SEPARATOR, "         "),
                 Token(Token.ARGUMENT, self.value),
+                Token(Token.EOL, "\n"),
+            ]
+        )
+
+
+class KeywordSuiteInitialization(StatementGenerator):
+    """
+    A class to generate a Suite Setup statement
+
+    Args: todo
+    Methods: todo
+    """
+
+    value: str = "Suite Initialization"
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.statement = Metadata.from_tokens(
+            tokens=[
+                Token(Token.ARGUMENT, "Suite Initialization"),
                 Token(Token.EOL, "\n"),
             ]
         )
