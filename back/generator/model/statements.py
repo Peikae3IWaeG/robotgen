@@ -130,7 +130,7 @@ class AuthorStatementGenerator(StatementGenerator):
         self.statement = Documentation.from_tokens(
             tokens=[
                 Token(Token.DOCUMENTATION, "Author"),
-                Token(Token.SEPARATOR, "       "),
+                Token(Token.SEPARATOR, "              "),
                 Token(Token.ARGUMENT, self.value),
                 Token(Token.EOL, "\n"),
             ]
