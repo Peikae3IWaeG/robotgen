@@ -1,7 +1,8 @@
 from typing import List
 import logging
+import requests
 from generator.model.robot import RobotGenerator
-
+from os import getenv
 from generator.model.sections import (
     TaskSectionGenerator,
     KeywordsSectionGenerator,
@@ -12,6 +13,7 @@ from generator.model.statements import (
     TaskDocumentationGenerator,
     TaskTagGenerator,
 )
+
 
 from flask_restx import Resource, fields, api, Namespace
 
@@ -68,7 +70,7 @@ class RobotDump(Resource):
         robot_generator.add(new_keyword_section)
         dumped_robot = robot_generator.dump()
         robot_generator._children = []  # temp hack to avoid rewriting
-        return dumped_robot
+        return {"data": dumped_robot}
 
 
 @api.route("/drop")
@@ -93,3 +95,36 @@ class RobotDrop(Resource):
         """Set name"""
         robot_generator.name = api.payload["name"]
         return "ok", 201
+
+
+@api.route("/run")
+class RobotRun(Resource):
+    def get(self):
+        """Run robot"""
+        settings_section = SettingsSectionGenerator()
+        [settings_section.add(x) for x in SettingsDataResource.dump()]
+        new_task_section = TaskSectionGenerator()
+        new_task_section.add(TaskStatementGenerator(robot_generator.name))
+        new_task_section.add(TaskDocumentationGenerator("Documentation placeholder"))
+        new_task_section.add(TaskTagGenerator("some example tags"))
+        [new_task_section.add(x) for x in CommandDataResource.dump()]
+        [new_task_section.add(x) for x in IssueDataResource.dump()]
+
+        new_keyword_section = KeywordsSectionGenerator()
+        [new_keyword_section.add(x) for x in ServiceImportDataResource.dump()]
+        [new_keyword_section.add(x) for x in VariableDataResource.dump()]
+        [new_keyword_section.add(x) for x in EnvironmentVariableDataResource.dump()]
+
+        robot_generator.add(settings_section)
+        robot_generator.add(new_task_section)
+        robot_generator.add(new_keyword_section)
+        dumped_robot = robot_generator.dump()
+        robot_generator._children = []  # temp hack to avoid rewriting
+
+        url = getenv("DEV_API_URL", "http://dev-api:8001")
+        run_status = requests.post(url=url, json={"data": dumped_robot})
+        return {
+            "status": run_status.json()["status"],
+            "log_html_url": f"{url}/log",
+            "report_html_url": f"{url}/log",
+        }

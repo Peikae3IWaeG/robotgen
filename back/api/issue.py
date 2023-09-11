@@ -14,7 +14,11 @@ api = Namespace("issue", description="issue related operations")
 
 stdout_assertion = api.model(
     "stdout_assertion",
-    {"target": fields.String, "condition": fields.String, "value": fields.String},
+    {
+        "target": fields.String(required=False, default="_line_"),
+        "condition": fields.String,
+        "value": fields.String,
+    },
 )
 
 issue = api.model(
@@ -71,7 +75,7 @@ class IssueResource(object):
 
     def __get_command_regex(self, name):
         regex = CResource.get_command_by_name(name)
-        if regex['regex'] != "":
+        if regex["regex"] != "":
             return f"${{{regex['name']}-regex}}"
         return ""
 
