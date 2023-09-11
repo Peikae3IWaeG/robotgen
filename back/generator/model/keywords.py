@@ -102,7 +102,7 @@ class RWCoreImportUserVariable(KeywordCallGenerator):
 
 
 class RWCoreImportUserSecret(RWCoreImportUserVariable):
-    name: str = "RW.Core.Import User Secret"
+    name: str = "RW.Core.Import Secret"
 
     def __init__(
         self,
@@ -146,7 +146,7 @@ class RWCoreImportService(KeywordCallGenerator):
 
 
 class RWCoreImportUserSecret(RWCoreImportUserVariable):
-    name: str = "RW.Core.Import User Secret"
+    name: str = "RW.Core.Import Secret"
 
 
 class RwCliRunCli(KeywordCallGenerator):

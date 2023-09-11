@@ -22,6 +22,32 @@ const KubectlPreparer = () => {
         },
       },
       {
+        endpoint: "http://localhost:5000/variables/robot/plain",
+        payload: {
+          name: "CONTEXT",
+          description:
+            "Which Kubernetes context to operate within.",
+          pattern: "\\w",
+          example:
+            "my-main-cluster",
+          default: "default",
+          secret: false,
+        },
+      },
+      {
+        endpoint: "http://localhost:5000/variables/robot/plain",
+        payload: {
+          name: "NAMESPACE",
+          description:
+            "The name of the Kubernetes namespace to scope actions and searching to. Accepts a single namespace in the format `-n namespace-name` or `--all-namespaces`.",
+          pattern: "\\w",
+          example:
+            "default",
+          default: "default",
+          secret: false,
+        },
+      },
+      {
         endpoint: "http://localhost:5000/variables/service",
         payload: {
           name: "kubectl",
