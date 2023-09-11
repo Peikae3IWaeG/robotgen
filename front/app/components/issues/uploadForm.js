@@ -32,7 +32,9 @@ const IssueForm = () => {
     severity: 1,
     response: "",
     description: "",
-    assertions: [{ target: "_line", condition: "raise_issue_if_eq", value: "" }],
+    assertions: [
+      { target: "_line", condition: "raise_issue_if_eq", value: "" },
+    ],
   });
 
   const [items, setItems] = useState([]);

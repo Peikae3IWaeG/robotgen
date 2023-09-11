@@ -60,64 +60,64 @@ const CommandForm = () => {
   return (
     <div>
       <FormControl style={{ minWidth: 300 }}>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          sx={{ width: "90%" }}
-          id="standard-basic"
-          required
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          label="Name"
-          variant="standard"
-        />
-        <HelpIcon info="Name of the variable holding command result"></HelpIcon>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            sx={{ width: "90%" }}
+            id="standard-basic"
+            required
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            label="Name"
+            variant="standard"
+          />
+          <HelpIcon info="Name of the variable holding command result"></HelpIcon>
 
-        <TextField
-          sx={{ width: "90%" }}
-          id="standard-basic"
-          required
-          type="text"
-          name="command"
-          value={formData.command}
-          onChange={handleInputChange}
-          label="Command"
-          variant="standard"
-        />
-        <HelpIcon info="A command to be run with RW.CLI.RUN Cli keyword, i.e. kubectl get pods"></HelpIcon>
-        <TextField
-          sx={{ width: "70%" }}
-          id="standard-basic"
-          type="text"
-          name="regex"
-          value={formData.regex}
-          onChange={handleInputChange}
-          label="Parse command output with regex"
-          variant="standard"
-        />
-        <HelpIcon info="Use this field if you want to test your regex against simulated output. Regex should contain groups, it's best if they're named."></HelpIcon>
-        <Button
-          variant="contained"
-          target="_blank"
-          href="https://regex101.com/"
-        >
-          Regex101
-        </Button>
-        <Box textAlign="center">
-          <Button onClick={handleSubmitGpt} type="submit">
-            Simulate the output
+          <TextField
+            sx={{ width: "90%" }}
+            id="standard-basic"
+            required
+            type="text"
+            name="command"
+            value={formData.command}
+            onChange={handleInputChange}
+            label="Command"
+            variant="standard"
+          />
+          <HelpIcon info="A command to be run with RW.CLI.RUN Cli keyword, i.e. kubectl get pods"></HelpIcon>
+          <TextField
+            sx={{ width: "70%" }}
+            id="standard-basic"
+            type="text"
+            name="regex"
+            value={formData.regex}
+            onChange={handleInputChange}
+            label="Parse command output with regex"
+            variant="standard"
+          />
+          <HelpIcon info="Use this field if you want to test your regex against simulated output. Regex should contain groups, it's best if they're named."></HelpIcon>
+          <Button
+            variant="contained"
+            target="_blank"
+            href="https://regex101.com/"
+          >
+            Regex101
           </Button>
-          <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable."></HelpIcon>
-        </Box>
-        <Box textAlign="center">
-          <br></br>
+          <Box textAlign="center">
+            <Button onClick={handleSubmitGpt} type="submit">
+              Simulate the output
+            </Button>
+            <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable."></HelpIcon>
+          </Box>
+          <Box textAlign="center">
+            <br></br>
 
-          <Button variant="contained" onClick={handleSubmit} type="submit">
-            Add Command
-          </Button>
-        </Box>
-      </form>
+            <Button variant="contained" onClick={handleSubmit} type="submit">
+              Add Command
+            </Button>
+          </Box>
+        </form>
       </FormControl>
 
       {outputData && (

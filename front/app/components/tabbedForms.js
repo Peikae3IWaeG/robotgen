@@ -23,7 +23,7 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography component={'div'}>{children}</Typography>
+          <Typography component={"div"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -52,48 +52,49 @@ export default function BasicTabs() {
 
   return (
     <div>
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Commands" {...a11yProps(0)} />
-          <Tab label="Variables" {...a11yProps(1)} />
-          <Tab label="Secrets" {...a11yProps(2)} />
-          <Tab label="Issues" {...a11yProps(2)} />
-        </Tabs>
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Commands" {...a11yProps(0)} />
+            <Tab label="Variables" {...a11yProps(1)} />
+            <Tab label="Secrets" {...a11yProps(2)} />
+            <Tab label="Issues" {...a11yProps(2)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <Typography variant="h7" color="primary">
+            Runs $command and assigns its output to $name variable.
+          </Typography>
+          <CommandForm></CommandForm>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <Typography variant="h7" color="primary">
+            Adds user-defined variable named $name.
+          </Typography>
+          <VariablesForm></VariablesForm>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <Typography variant="h7" color="primary">
+            Adds user-defined secret named $name.
+          </Typography>
+          <SecretsForm></SecretsForm>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+          <Typography variant="h7" color="primary">
+            <p>
+              Creates an issue when conditions specified in assertions section
+              are fulfilled. At least one assertion must be specified. Once
+              ChatGPT mode is added, it will be a default method of generating
+              issues.
+            </p>
+          </Typography>
+          <BasicAccordion></BasicAccordion>
+        </CustomTabPanel>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        <Typography variant="h7" color="primary">
-          Runs $command and assigns its output to $name variable.
-        </Typography>
-        <CommandForm></CommandForm>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <Typography variant="h7" color="primary">
-          Adds user-defined variable named $name.
-        </Typography>
-        <VariablesForm></VariablesForm>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <Typography variant="h7" color="primary">
-          Adds user-defined secret named $name.
-        </Typography>
-        <SecretsForm></SecretsForm>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <Typography variant="h7" color="primary">
-          <p>
-            Creates an issue when conditions specified in assertions section are
-            fulfilled. At least one assertion must be specified. Once ChatGPT
-            mode is added, it will be a default method of generating issues.
-          </p>
-        </Typography>
-        <BasicAccordion></BasicAccordion>
-      </CustomTabPanel>
-    </Box>
     </div>
   );
 }
