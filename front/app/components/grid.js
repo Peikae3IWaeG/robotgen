@@ -10,11 +10,15 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { ExpandMore } from "@mui/icons-material";
-
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import Item from "./paperitem";
+import HelpIcon from "./helpIcon";
 
 import ObjectiveForm from "../components/objective";
-
+import BasicTabs from "./tabbedForms";
+import DataTablesTabs from "./tabbedTables";
+import MenuBar from "./menubar";
 export default function MyGrid(props) {
   const {
     secretsTable,
@@ -36,17 +40,32 @@ export default function MyGrid(props) {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item m={1} xs={12}>
-          <Item sx={{}}>
-            <h1>Robot generator</h1>
-          </Item>
+          <MenuBar></MenuBar>
         </Grid>
 
         <Grid item m={1} xs={5}>
           <Stack spacing={2}>
             <Item>
-              <ObjectiveForm></ObjectiveForm>
-              <hr></hr>
-              <h2>Miscellaneous Actions</h2>
+              <Typography variant="h4" color="primary">
+                Add resource
+                <HelpIcon info="Add resources "></HelpIcon>
+              </Typography>
+              <BasicTabs></BasicTabs>
+            </Item>
+
+            <Item>
+              <Typography variant="h4" color="primary">
+                Get resources
+              </Typography>
+
+              <DataTablesTabs></DataTablesTabs>
+              {/* <Item>{variablesForm}</Item> */}
+            </Item>
+
+            <Item>
+              <Typography variant="h4" color="primary">
+                Miscellaneous Actions
+              </Typography>
 
               <Grid container spacing={2}>
                 <Grid item m={1} xs={2}>
@@ -61,26 +80,7 @@ export default function MyGrid(props) {
               </Grid>
             </Item>
 
-            <Item>
-              <h2>Add variable</h2>
-              <Item>{variablesForm}</Item>
-            </Item>
-
-            <Item>
-              <h2>Add Secret</h2>
-              <Item>{secretsForm}</Item>
-            </Item>
-
-            <Item>
-              <h2>Add command</h2>
-              <Item>{commandForm}</Item>
-            </Item>
-
-            <Item>
-              <h2>Add Issue</h2>
-              <Item>{issueForm}</Item>
-            </Item>
-
+            {/* 
             <Accordion sx={{}}>
               <AccordionSummary
                 expandIcon={<ExpandMore />}
@@ -125,7 +125,7 @@ export default function MyGrid(props) {
               <AccordionDetails>
                 <Item>{issueTable}</Item>
               </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
           </Stack>
         </Grid>
 

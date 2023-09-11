@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-
+import HelpIcon from "../helpIcon";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -70,7 +70,7 @@ const CommandForm = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <TextField
-          fullWidth
+          sx={{ width: "90%" }}
           id="standard-basic"
           required
           type="text"
@@ -80,8 +80,10 @@ const CommandForm = () => {
           label="Name"
           variant="standard"
         />
+        <HelpIcon info="Name of the variable holding command result"></HelpIcon>
+
         <TextField
-          fullWidth
+          sx={{ width: "90%" }}
           id="standard-basic"
           required
           type="text"
@@ -91,8 +93,9 @@ const CommandForm = () => {
           label="Command"
           variant="standard"
         />
+        <HelpIcon info="A command to be run with RW.CLI.RUN Cli keyword, i.e. kubectl get pods"></HelpIcon>
         <TextField
-          fullWidth
+          sx={{ width: "70%" }}
           id="standard-basic"
           type="text"
           name="regex"
@@ -101,12 +104,19 @@ const CommandForm = () => {
           label="Parse command output with regex"
           variant="standard"
         />
+        <HelpIcon info="Use this field if you want to test your regex against simulated output. Regex should contain groups, it's best if they're named."></HelpIcon>
+        <Button
+          variant="contained"
+          target="_blank"
+          href="https://regex101.com/"
+        >
+          Regex101
+        </Button>
         <Box textAlign="center">
-          <br></br>
-
           <Button onClick={handleSubmitGpt} type="submit">
             Simulate the output
           </Button>
+          <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable."></HelpIcon>
         </Box>
         <Box textAlign="center">
           <br></br>

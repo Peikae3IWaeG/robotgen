@@ -80,14 +80,14 @@ const IssueTable = () => {
                 <TableCell>{item.regex}</TableCell>
                 <TableCell>{item.description}</TableCell>
                 <TableCell>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Target</TableCell>
+                      <TableCell>Condition</TableCell>
+                      <TableCell>Value</TableCell>
+                    </TableRow>
+                  </TableHead>
                   <TableBody>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Target</TableCell>
-                        <TableCell>Condition</TableCell>
-                        <TableCell>Value</TableCell>
-                      </TableRow>
-                    </TableHead>
                     <TableBody>{renderAssertions(item.assertions)}</TableBody>
                   </TableBody>
                 </TableCell>
@@ -99,41 +99,6 @@ const IssueTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Command</th>
-            <th>Severity</th>
-            <th>Regex</th>
-            <th>Description</th>
-            <th>Assertions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              <td>{item.id}</td>
-              <td>{item.command}</td>
-              <td>{item.severity}</td>
-              <td>{item.regex}</td>
-              <td>{item.description}</td>
-              <td>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Target</th>
-                      <th>Condition</th>
-                      <th>Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>{renderAssertions(item.assertions)}</tbody>
-                </table>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </div>
   );
 };

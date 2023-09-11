@@ -6,6 +6,7 @@ import { Box, Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
+import HelpIcon from "../helpIcon";
 
 const VariablesForm = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ const VariablesForm = () => {
       <FormControl style={{ minWidth: 300 }}>
         <form onSubmit={handleSubmit}>
           <TextField
-            fullWidth
+            sx={{ width: "90%" }}
             id="standard-basic"
             required
             type="text"
@@ -58,8 +59,9 @@ const VariablesForm = () => {
             label="Name"
             variant="standard"
           />
+          <HelpIcon info="Name of the user-defined variable"></HelpIcon>
           <TextField
-            fullWidth
+            sx={{ width: "90%" }}
             id="standard-basic"
             type="text"
             name="description"
@@ -68,8 +70,9 @@ const VariablesForm = () => {
             label="Description"
             variant="standard"
           />
+          <HelpIcon info="Variable description. The more comprehensive, the better GPT-related features results would be."></HelpIcon>
           <TextField
-            fullWidth
+            sx={{ width: "90%" }}
             id="standard-basic"
             type="text"
             name="pattern"
@@ -78,24 +81,26 @@ const VariablesForm = () => {
             label="Pattern"
             variant="standard"
           />
+          <HelpIcon info="Pattern in form of regex. Default: \w"></HelpIcon>
           <TextField
-            fullWidth
+            sx={{ width: "90%" }}
             id="standard-basic"
             type="text"
             name="example"
             value={formData.example}
             onChange={handleInputChange}
-            label="example"
+            label="Example"
             variant="standard"
           />
+          <HelpIcon info="Example value of the variable. Using example values improves GPT-related functions accuracy."></HelpIcon>
           <TextField
-            fullWidth
+            sx={{ width: "90%" }}
             id="standard-basic"
             type="text"
             name="default"
             value={formData.default}
             onChange={handleInputChange}
-            label="default"
+            label="Default"
             variant="standard"
           />
           <Box justify="flex-end" textAlign="center">

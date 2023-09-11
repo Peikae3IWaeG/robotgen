@@ -1,3 +1,4 @@
+"use client";
 import VariablesTable from "./components/variables/dataTable";
 import VariablesForm from "./components/variables/uploadForm";
 

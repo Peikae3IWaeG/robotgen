@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import HelpIcon from "./helpIcon";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -53,6 +54,8 @@ const ObjectiveForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <HelpIcon info="This value will be used as the task name"></HelpIcon>
+
         <TextField
           id="standard-basic"
           required
@@ -62,7 +65,7 @@ const ObjectiveForm = () => {
           onChange={handleInputChange}
           label="What is the objective of this codebundle? "
           variant="standard"
-          style={{ width: 500 }}
+          style={{ width: 400 }}
         />
 
         <Button variant="contained" onClick={handleSubmit} type="submit">
