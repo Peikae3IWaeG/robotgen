@@ -4,17 +4,8 @@ import React, { useState } from "react";
 import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
+import FormControl from "@mui/material/FormControl";
 import HelpIcon from "../helpIcon";
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "left",
-  color: theme.palette.text.secondary,
-}));
 
 const CommandForm = () => {
   const [formData, setFormData] = useState({
@@ -68,6 +59,7 @@ const CommandForm = () => {
 
   return (
     <div>
+      <FormControl style={{ minWidth: 300 }}>
       <form onSubmit={handleSubmit}>
         <TextField
           sx={{ width: "90%" }}
@@ -126,6 +118,7 @@ const CommandForm = () => {
           </Button>
         </Box>
       </form>
+      </FormControl>
 
       {outputData && (
         <Item>
