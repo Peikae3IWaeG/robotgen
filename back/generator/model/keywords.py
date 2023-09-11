@@ -176,7 +176,7 @@ class RwCliParseCliOutputByLine(KeywordCallGenerator):
     name: str = "RW.CLI.Parse Cli Output By Line"
 
     rsp: str
-    set_severity_Level: int
+    set_severity_level: int
     set_issue_details: str
 
     def __init__(
@@ -185,7 +185,7 @@ class RwCliParseCliOutputByLine(KeywordCallGenerator):
         variable="",
         rsp: str = "",
         regex: str = "",
-        set_severity_Level: int = 1,
+        set_severity_level: int = 1,
         set_issue_expected: str = "",
         set_issue_actual: str = "",
         set_issue_title: str = "",
@@ -197,7 +197,7 @@ class RwCliParseCliOutputByLine(KeywordCallGenerator):
         self.kwargs = {
             "rsp": rsp,
             "lines_like_regexp": regex,
-            "set_severity_Level": set_severity_Level,
+            "set_severity_level": set_severity_level,
             "set_issue_details": set_issue_details,
             "set_issue_expected": set_issue_expected,
             "set_issue_actual": set_issue_actual,

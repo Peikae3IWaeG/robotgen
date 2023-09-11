@@ -8,7 +8,7 @@ import requests
 
 from api.variable import VariableDataResource as SResource
 from api.command import DataResource as CResource
-
+import logging
 
 api = Namespace("issue", description="issue related operations")
 
@@ -70,10 +70,10 @@ class IssueResource(object):
         self.issues = [x for x in self.issues if x["id"] != id]
 
     def __get_command_regex(self, name):
-        regex = CResource.get_command_by_name(name)["name"]
-        if regex != "":
-            return f"${{{regex}-regex}}"
-        return regex
+        regex = CResource.get_command_by_name(name)
+        if regex['regex'] != "":
+            return f"${{{regex['name']}-regex}}"
+        return ""
 
     def dump(self) -> TaskSectionGenerator:
         if len(self.issues) > 0:

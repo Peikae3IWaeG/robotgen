@@ -32,7 +32,7 @@ const IssueForm = () => {
     severity: 1,
     response: "",
     description: "",
-    assertions: [{ target: "", condition: "raise_issue_if_eq", value: "" }],
+    assertions: [{ target: "_line", condition: "raise_issue_if_eq", value: "" }],
   });
 
   const [items, setItems] = useState([]);
@@ -183,12 +183,12 @@ const IssueForm = () => {
                   handleAssertionChange(index, "condition", e.target.value)
                 }
               >
-                <MenuItem value={"raise_issue_if_eq"}>Equal to</MenuItem>
-                <MenuItem value={"raise_issue_if_neq"}>Not equal to</MenuItem>
-                <MenuItem value={"raise_issue_if_lt"}>Less than</MenuItem>
-                <MenuItem value={"raise_issue_if_gt"}>Greater than</MenuItem>
-                <MenuItem value={"raise_issue_if_contains"}>Contains</MenuItem>
-                <MenuItem value={"raise_issue_if_ncontains"}>
+                <MenuItem value={"_raise_issue_if_eq"}>Equal to</MenuItem>
+                <MenuItem value={"_raise_issue_if_neq"}>Not equal to</MenuItem>
+                <MenuItem value={"_raise_issue_if_lt"}>Less than</MenuItem>
+                <MenuItem value={"_raise_issue_if_gt"}>Greater than</MenuItem>
+                <MenuItem value={"_raise_issue_if_contains"}>Contains</MenuItem>
+                <MenuItem value={"_raise_issue_if_ncontains"}>
                   Not contain
                 </MenuItem>
               </Select>
