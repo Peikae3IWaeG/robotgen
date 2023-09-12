@@ -13,7 +13,7 @@ const ApiDataTable = () => {
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/variables")
+    fetch("http://localhost:5127/variables")
       .then((response) => response.json())
       .then((data) => setApiData(data))
       .catch((error) => console.error("Error fetching API data:", error));

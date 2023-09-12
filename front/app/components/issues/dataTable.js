@@ -14,7 +14,7 @@ const IssueTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/issue")
+    fetch("http://localhost:5127/issue")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -30,7 +30,7 @@ const IssueTable = () => {
   }, []);
 
   const handleDelete = (id) => {
-    fetch("http://localhost:5000/issue/", {
+    fetch("http://localhost:5127/issue/", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

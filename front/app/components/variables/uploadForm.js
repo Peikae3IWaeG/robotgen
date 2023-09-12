@@ -29,7 +29,7 @@ const VariablesForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:5000/variables/robot/plain", {
+    fetch("http://localhost:5127/variables/robot/plain", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

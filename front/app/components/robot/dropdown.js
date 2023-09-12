@@ -11,7 +11,7 @@ const DropdownForm = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("http://localhost:5000/command");
+        const response = await fetch("http://localhost:5127/command");
         const data = await response.json();
         setItems(data);
         setLoading(false);

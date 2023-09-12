@@ -15,14 +15,14 @@ const VariablesTable = () => {
 
   useEffect(() => {
     // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
-    fetch("http://localhost:5000/variables/robot/plain")
+    fetch("http://localhost:5127/variables/robot/plain")
       .then((response) => response.json())
       .then((data) => setApiData(data))
       .catch((error) => console.error("Error fetching API data:", error));
   }, []);
 
   const handleDelete = (name) => {
-    fetch("http://localhost:5000/variables/robot/plain", {
+    fetch("http://localhost:5127/variables/robot/plain", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

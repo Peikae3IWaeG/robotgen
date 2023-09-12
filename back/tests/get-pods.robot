@@ -11,11 +11,11 @@ Library  Process
 
 *** Test Cases ***
 Drop existing config
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${response}=  GET On Session  mysession  /robot/drop  
     Status Should Be  201  ${response}  
 Add kubeconfig secret
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=kubeconfig  
     ...  secret={true}
@@ -27,7 +27,7 @@ Add kubeconfig secret
     ...  json=${body}
     Status Should Be  200  ${response}  
 Add CONTEXT variable
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=CONTEXT  
     ...  secret=${false}
@@ -39,7 +39,7 @@ Add CONTEXT variable
     ...  json=${body}
     Status Should Be  200  ${response}  
 Add NAMESPACE variable
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=NAMESPACE  
     ...  secret={false}
@@ -51,7 +51,7 @@ Add NAMESPACE variable
     ...  json=${body}
     Status Should Be  200  ${response}  
 Add kubectl service
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=kubectl  
     ...  default=kubectl-service.shared
@@ -61,7 +61,7 @@ Add kubectl service
     ...  json=${body}
     Status Should Be  200  ${response}  
 Add KUBECONFIG env
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=KUBECONFIG  
     ...  value=./\${kubeconfig.key}
@@ -69,7 +69,7 @@ Add KUBECONFIG env
     ...  json=${body}
     Status Should Be  200  ${response}  
 Add kubectl command
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=kubectl  
     ...  command=kubectl get pod -n online-boutique
@@ -79,7 +79,7 @@ Add kubectl command
     Status Should Be  200  ${response}
 Add Issue
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${assertion}=    Create Dictionary
     ...  condition=_raise_issue_if_contains
     ...  target=_line
@@ -96,7 +96,7 @@ Add Issue
     Log to console  ${body}
     Status Should Be  200  ${response}  
 Get RobotFile
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${response}=  GET On Session  mysession  /robot
     Status Should Be  200  ${response}  
     Log To Console  ${response.json()['data']}

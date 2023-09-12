@@ -11,7 +11,7 @@ Library  String
 *** Test Cases ***
 Add kubeconfig secret
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=kubeconfig  
     ...  secret=True
@@ -24,7 +24,7 @@ Add kubeconfig secret
     Status Should Be  200  ${response}  
 Add CONTEXT variable
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=CONTEXT  
     ...  secret=False
@@ -37,7 +37,7 @@ Add CONTEXT variable
     Status Should Be  200  ${response}  
 Add NAMESPACE variable
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=NAMESPACE  
     ...  secret=False
@@ -50,7 +50,7 @@ Add NAMESPACE variable
     Status Should Be  200  ${response}  
 Add kubectl service
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=kubectl  
     ...  default="kubectl-service.shared"
@@ -61,7 +61,7 @@ Add kubectl service
     Status Should Be  200  ${response}  
 Add KUBECONFIG env
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${body}=  Create Dictionary  
     ...  name=KUBECONFIG  
     ...  value="./\${kubeconfig.key}"
@@ -70,7 +70,7 @@ Add KUBECONFIG env
     Status Should Be  200  ${response}  
 Get RobotFile
     [documentation]  This test case verifies that the response code of the GET Request should be 200
-    Create Session  mysession  http://127.0.0.1:5000
+    Create Session  mysession  http://127.0.0.1:5127
     ${response}=  GET On Session  mysession  /robot
     Status Should Be  200  ${response}  
     ${robotfile} = 	Decode Bytes To String 	${response.content} 	UTF-8 	

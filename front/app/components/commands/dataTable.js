@@ -17,7 +17,7 @@ const CommandTable = () => {
   }, []);
 
   const fetchApiData = () => {
-    fetch("http://localhost:5000/command")
+    fetch("http://localhost:5127/command")
       .then((response) => response.json())
       .then((data) => setApiData(data))
       .catch((error) => console.error("Error fetching API data:", error));
@@ -25,7 +25,7 @@ const CommandTable = () => {
 
   const handleDelete = (name) => {
     // Send DELETE request to remove the row
-    fetch("http://localhost:5000/command/", {
+    fetch("http://localhost:5127/command/", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

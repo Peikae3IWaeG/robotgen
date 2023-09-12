@@ -13,7 +13,7 @@ const RobotDataDisplay = () => {
   const [outputData = { status: "unknown" }, setOutputData] = useState(null);
 
   const handleDrop = () => {
-    fetch("http://localhost:5000/robot/drop", {
+    fetch("http://localhost:5127/robot/drop", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const RobotDataDisplay = () => {
       );
   };
   const handleRun = () => {
-    fetch("http://localhost:5000/robot/run", {
+    fetch("http://localhost:5127/robot/run", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const RobotDataDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/robot/");
+        const response = await fetch("http://localhost:5127/robot/");
         const data = await response.json();
         setApiData(data["data"]);
       } catch (error) {

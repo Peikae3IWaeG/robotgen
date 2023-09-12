@@ -14,14 +14,14 @@ const SecretsTable = () => {
   const [secretsApiData, setSecretsApiData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/variables/robot/secret")
+    fetch("http://localhost:5127/variables/robot/secret")
       .then((response) => response.json())
       .then((data) => setSecretsApiData(data))
       .catch((error) => console.error("Error fetching API data:", error));
   }, []);
 
   const handleDelete = (name) => {
-    fetch("http://localhost:5000/variables/robot/secret", {
+    fetch("http://localhost:5127/variables/robot/secret", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

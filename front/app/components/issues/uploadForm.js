@@ -45,7 +45,7 @@ const IssueForm = () => {
     // Function to fetch data from the API
     const fetchItems = async () => {
       try {
-        const response = await fetch("http://localhost:5000/command"); // Replace with your API endpoint
+        const response = await fetch("http://localhost:5127/command"); // Replace with your API endpoint
         const data = await response.json();
         setItems(data); // Assuming the response is an array of items
         setLoading(false);
@@ -88,7 +88,7 @@ const IssueForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Sending API request:", issueData);
-    fetch("http://localhost:5000/issue/", {
+    fetch("http://localhost:5127/issue/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

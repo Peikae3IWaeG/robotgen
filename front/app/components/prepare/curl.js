@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 
 const KubectlPreparer = () => {
   const [apiResponses, setApiResponses] = useState([]);
-  const apiEndpoint = "http://localhost:5000/variables/";
+  const apiEndpoint = "http://localhost:5127/variables/";
 
   const handleApiRequests = () => {
     const requestDataList = [
       {
-        endpoint: "http://localhost:5000/variables/service",
+        endpoint: "http://localhost:5127/variables/service",
         payload: {
           name: "kubectl",
           description: "The location service used to interpret shell commands.",

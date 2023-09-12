@@ -26,7 +26,7 @@ const CommandForm = () => {
 
   const handleSubmit = (addevent) => {
     addevent.preventDefault();
-    fetch("http://localhost:5000/command/", {
+    fetch("http://localhost:5127/command/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const CommandForm = () => {
 
   const handleSubmitGpt = (simevent) => {
     simevent.preventDefault();
-    fetch("http://localhost:5000/gpt/simulate", {
+    fetch("http://localhost:5127/gpt/simulate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
