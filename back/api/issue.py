@@ -12,6 +12,7 @@ import logging
 
 api = Namespace("issue", description="issue related operations")
 
+
 stdout_assertion = api.model(
     "stdout_assertion",
     {
@@ -21,18 +22,19 @@ stdout_assertion = api.model(
     },
 )
 
+
 issue = api.model(
     "issue",
     {
-        "id": fields.Integer,
-        "severity": fields.Integer,
-        "regex": fields.String,
-        "response": fields.String,
+        "id": fields.Integer(required=False),
+        "severity": fields.Integer(required=False),
+        "regex": fields.String(required=False),
+        "response": fields.String(required=False),
         "assertions": fields.List(fields.Nested(stdout_assertion)),
-        "issue_details": fields.String,
-        "issue_title": fields.String,
-        "issue_expected": fields.String,
-        "issue_actual": fields.String,
+        "issue_details": fields.String(required=False),
+        "issue_title": fields.String(required=False),
+        "issue_expected": fields.String(required=False),
+        "issue_actual": fields.String(required=False),
     },
 )
 

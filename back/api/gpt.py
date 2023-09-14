@@ -3,6 +3,10 @@ from abc import ABC
 import openai
 import os
 from typing import Dict, List
+from .issue import issue, stdout_assertion
+import logging
+import json
+from jsonschema import validate
 
 api = Namespace("gpt", description="ChatGPT generation")
 
@@ -16,8 +20,25 @@ gpt_request = api.model(
 )
 
 
-class Validator(ABC):
+class ResponseMutator(ABC):
     pass
+
+
+class ResponseValidator(ABC):
+    pass
+
+
+class IssueValidator(ResponseValidator):
+    def __init__(self, response) -> None:
+        super().__init__()
+        logging.info("Starting validation")
+        json_response = json.loads(response)
+        tmp_schema = issue._schema
+        logging.info(tmp_schema["properties"]["assertions"])
+        tmp_schema["properties"]["assertions"]["items"] = stdout_assertion._schema
+        logging.info(tmp_schema["properties"]["assertions"])
+        validate(instance=json_response, schema=tmp_schema)
+        logging.info("Finished validation")
 
 
 # PoC, to be refactored in iteration 2 using i.e langchain
@@ -34,13 +55,18 @@ class GPTRunner(ABC):
     system: str = "You're a helpful assistant"
     user: str = "Tell me a joke"
     messages: List[Dict]
-    validator: Validator
+    validators: List[ResponseValidator]
+    response: str
 
     def __init__(self) -> None:
         self.openai_key = os.getenv("OPENAI_API_KEY")
 
     def generate_response():
         pass
+
+    def validate(self):
+        for validator in self.validators:
+            validator(self.response)
 
 
 class GPTSimulator(GPTRunner):
@@ -61,7 +87,7 @@ class GPTSimulator(GPTRunner):
         chat_completion = openai.ChatCompletion.create(
             model=self.model, messages=self.prompt
         )
-        print(chat_completion["choices"][0]["message"]["content"])
+        logging.info(chat_completion["choices"][0]["message"]["content"])
         return chat_completion
 
 
@@ -85,11 +111,11 @@ class GPTRegex(GPTRunner):
         )
 
         self.prompt.append(chat_completion["choices"][0]["message"].to_dict())
-        print(type(chat_completion["choices"][0]["message"]))
+        logging.info(type(chat_completion["choices"][0]["message"]))
         self.prompt.append(
             {
                 "role": "user",
-                "content": "Now you're a regex expert. Create a regex to parse the text. Use group names from the serialized data structure. Prefer generic tokens and greedy quantifiers. Print only the regex. ",
+                "content": "Now you're a regex expert. Create a regex to parse the text. Use group names from the serialized data structure. Prefer generic tokens and greedy quantifiers. logging.info only the regex. ",
             }
         )
         chat_completion = openai.ChatCompletion.create(
@@ -102,22 +128,20 @@ class GPTIssue(GPTRunner):
     def __init__(self, user) -> None:
         super().__init__()
         self.user = user
+        self.validators = [IssueValidator]
 
     system: str = """
     Consider following schemas:
 
         ```
-            "issues": 
-        [
             {
                 "severity": fields.Integer,
-                "description": fields.String,
                 "assertions": fields.List(fields.Nested(stdout_assertion)),
-                "expected_state": fields.String,
-                " actual_state": fields.String,
-                "issue_title": fields.String
-            },
-        ]
+                "issue_details": fields.String,
+                "issue_title": fields.String,
+                "issue_expected": fields.String,
+                "issue_actual": fields.String,
+            }
         ```
 
         ```
@@ -136,24 +160,20 @@ class GPTIssue(GPTRunner):
 
         Available conditions mappings:
         ```
-            "Equal to" : raise_issue_if_eq
-            "Not equal to": raise_issue_if_neq
-            "Less than": raise_issue_if_lt
-            "Greater than":  raise_issue_if_gt
-            "Contains":  raise_issue_if_contains
-            "Not contain": raise_issue_if_ncontains
+            "Equal to" : "_raise_issue_if_eq"
+            "Not equal to": "_raise_issue_if_neq"
+            "Less than": "_raise_issue_if_lt"
+            "Greater than":  "_raise_issue_if_gt"
+            "Contains":  "_raise_issue_if_contains"
+            "Not contain": "_raise_issue_if_ncontains"
         ```
         *Always* use mapped values in the condition field.
 
-        "actual_state" = description of the state when the issue is raised due to a met condition.
-
-        The title should be a concise version of "description"
-
+        "actual_state" is a description of the state when the issue is raised due to a met condition.
         "actual_state" is *always* a description of the state when the issue is raised due to a met condition.
-
         "expected_state" is *always* a description of the state when everything is ok up and functional, and conditions in the "assertions" list are not fulfilled.
-
-        The description is generated based "expected_state", "actual_state" and the overall tone of the text.
+        "issue_details" is generated based "expected_state", "actual_state" and the overall tone of the text.
+        "issue_title" should be a concise version of "issue_details"
 
         *Always* return *only* resulting JSON. The JSON must contain all required fields. 
     """
@@ -169,8 +189,11 @@ class GPTIssue(GPTRunner):
         chat_completion = openai.ChatCompletion.create(
             model=self.model, messages=self.prompt
         )
-        print(chat_completion["choices"][0]["message"]["content"])
-        return chat_completion
+        logging.info(chat_completion["choices"][0]["message"]["content"])
+        content = chat_completion["choices"][0]["message"]["content"]
+        self.response = content
+        self.validate()
+        return json.loads(content)
 
 
 @api.route("/simulate")
