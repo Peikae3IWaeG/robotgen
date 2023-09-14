@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import IssueForm from "./uploadForm";
-
+import ApiRequestComponent from "./chatGPT";
 export default function BasicAccordion() {
   return (
     <div>
@@ -20,9 +20,7 @@ export default function BasicAccordion() {
         >
           <Typography>Manual</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <IssueForm></IssueForm>
-        </AccordionDetails>
+        <AccordionDetails>{/* <IssueForm></IssueForm> */}</AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary
@@ -33,10 +31,7 @@ export default function BasicAccordion() {
           <Typography>ChatGPT (Coming soon)</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <ApiRequestComponent></ApiRequestComponent>
         </AccordionDetails>
       </Accordion>
     </div>

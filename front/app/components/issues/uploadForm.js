@@ -33,7 +33,7 @@ const IssueForm = () => {
     response: "",
     description: "",
     assertions: [
-      { target: "_line", condition: "raise_issue_if_eq", value: "" },
+      { target: "_line", condition: "_raise_issue_if_eq", value: "" },
     ],
   });
 
@@ -72,7 +72,7 @@ const IssueForm = () => {
       ...prevData,
       assertions: [
         ...prevData.assertions,
-        { target: "", condition: "raise_issue_if_eq", value: "" },
+        { target: "", condition: "_raise_issue_if_eq", value: "" },
       ],
     }));
   };
