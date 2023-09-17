@@ -22,11 +22,21 @@ const Item = styled(Paper)(({ theme }) => ({
 
   color: theme.palette.text.secondary,
 }));
-const handleAssertionChange = (index, field, value) => {};
+const handleAssertionChange = (index, field, value) => { };
 
 const ApiRequestComponent = () => {
   const [inputText, setInputText] = useState("");
-  const [apiResponse, setApiResponse] = useState(null);
+  const [command, setCommand] = useState({
+    command: 1
+  });
+  const [apiResponse, setApiResponse] = useState({
+    severity: 1,
+    response: "",
+    description: "",
+    assertions: [
+    ],
+  });
+
   const [formData, setFormData] = useState(null);
   const [issueData, setIssueData] = useState(null);
   const [items, setItems] = useState([]);
@@ -52,6 +62,7 @@ const ApiRequestComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Sending API request:", issueData);
+    apiResponse.response = command.response
     fetch("http://localhost:5127/issue/", {
       method: "POST",
       headers: {
@@ -70,6 +81,13 @@ const ApiRequestComponent = () => {
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
+
+
+  const handleCommandChange = (event) => {
+    const { name, value } = event.target;
+    setCommand((prevData) => ({ ...prevData, [name]: value }));
+  };
+
 
   const handleGeneratedInputChange = (event) => {
     const { name, value } = event.target;
@@ -111,7 +129,7 @@ const ApiRequestComponent = () => {
     })
       .then((response) => response.json())
       .then((data) =>
-        setApiResponse(JSON.parse(data["choices"][0]["message"]["content"])),
+        setApiResponse(data),
       )
       .catch((error) => console.error(error));
   };
@@ -119,16 +137,34 @@ const ApiRequestComponent = () => {
   return (
     <div>
       <FormControl fullWidth>
+
+        <p>Command
+          <HelpIcon info="Choose one of previously defined commands for evaluation"></HelpIcon>
+        </p>
+        <FormGroup>
+          <Select
+            name="response"
+            id="standard-basic"
+            onChange={handleCommandChange}
+          >
+            {items.map((item) => (
+              <MenuItem value={item.name}>{item.name}</MenuItem>
+            ))}
+          </Select>
+        </FormGroup>
+        <p>ChatGPT prompt
+          <HelpIcon info="Describe the conditions when an issue should be raised. I.e 'Raise an issue if command output contains word pending'. Use the generated response as an entrypoint for further tuning. "></HelpIcon>
+        </p>
         <TextField
           label="Input"
           variant="outlined"
           value={inputText}
           onChange={handleInputChange}
         />
+        <p></p>
         <Button variant="contained" onClick={handleApiRequest}>
-          Send API Request
+          Generate with ChatGPT
         </Button>
-        {/* <pre>{JSON.stringify(apiResponse)}</pre> */}
 
         {formData && (
           <Button variant="contained" onClick={() => setFormData(null)}>
@@ -137,7 +173,14 @@ const ApiRequestComponent = () => {
         )}
         {apiResponse && (
           <div>
-            <pre>{JSON.stringify(apiResponse)}</pre>
+            <h4>Preview</h4>
+            <p>
+              {apiResponse && (
+
+                JSON.stringify(apiResponse)
+              )
+              }
+            </p>
             Severity
             <FormGroup>
               <Select
@@ -147,24 +190,11 @@ const ApiRequestComponent = () => {
                 value={apiResponse.severity}
                 onChange={handleGeneratedInputChange}
               >
-                <MenuItem value={0}>0</MenuItem>
                 <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
                 <MenuItem value={4}>4</MenuItem>
                 <MenuItem value={5}>5</MenuItem>
-              </Select>
-            </FormGroup>
-            Command
-            <FormGroup>
-              <Select
-                name="response"
-                id="standard-basic"
-                onChange={handleGeneratedInputChange}
-              >
-                {items.map((item) => (
-                  <MenuItem value={item.name}>{item.name}</MenuItem>
-                ))}
               </Select>
             </FormGroup>
             <FormGroup>
@@ -260,6 +290,7 @@ const ApiRequestComponent = () => {
             </Box>
           </div>
         )}
+        <p></p>
         <Box justify="flex-end" textAlign="center">
           <Button variant="contained" onClick={handleSubmit} type="submit">
             Submit

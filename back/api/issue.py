@@ -106,9 +106,10 @@ class IssueResource(object):
                         assign_to_variable=False,
                         regex=self.__get_command_regex(issue["response"]),
                         rsp="${{{}}}".format(issue["response"]),
-                        set_issue_expected=issue["description"],
-                        set_issue_details="More details available here \\n\\n $_stdout \\n\\n ",
-                        set_issue_actual="issue_actual placeholder",
+                        set_issue_expected=issue["issue_expected"],
+                        set_issue_details=issue["issue_details"],
+                        set_issue_actual=issue["issue_actual"],
+                        set_issue_title=issue['issue_title'],
                         extra_kwargs=dict_kwargs,
                     )
                 )

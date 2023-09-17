@@ -15,25 +15,28 @@ export default function BasicAccordion() {
       <Accordion defaultExpanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Manual</Typography>
-        </AccordionSummary>
-        <AccordionDetails>{/* <IssueForm></IssueForm> */}</AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography>ChatGPT (Coming soon)</Typography>
+          <Typography>ChatGPT</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ApiRequestComponent></ApiRequestComponent>
         </AccordionDetails>
       </Accordion>
+      <Accordion >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Manual</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <IssueForm></IssueForm>
+        </AccordionDetails>
+      </Accordion>
+
     </div>
   );
 }

@@ -153,8 +153,7 @@ class GPTIssue(GPTRunner):
 
         Serialize the text to match the schema. Response is can be called output, cli task, or similar as well.
 
-        Target mappings:
-        "_line": "line", "result", "output" and similar
+        Always replace value of stdout_assertion.target equal to "line", "result" or "output" with "_line"
         if regex group is mentioned, "target" should be equal to the mentioned regex group name.
         
 
@@ -174,6 +173,8 @@ class GPTIssue(GPTRunner):
         "expected_state" is *always* a description of the state when everything is ok up and functional, and conditions in the "assertions" list are not fulfilled.
         "issue_details" is generated based "expected_state", "actual_state" and the overall tone of the text.
         "issue_title" should be a concise version of "issue_details"
+
+        Try to guess "severity", if impossible to guess based on the context, use 2.
 
         *Always* return *only* resulting JSON. The JSON must contain all required fields. 
     """
