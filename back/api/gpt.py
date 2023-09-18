@@ -7,6 +7,7 @@ from .issue import issue, stdout_assertion
 import logging
 import json
 from jsonschema import validate
+import re 
 
 api = Namespace("gpt", description="ChatGPT generation")
 
@@ -205,12 +206,26 @@ class RobotDump(Resource):
         """Simulate command output"""
         sim = GPTSimulator(user=api.payload["command"])
         sim.temperature = 0.3
+        regex_numbered_explanation: List() = []
+        regex_named_explanation: List() = []
+        regex = api.payload["regex"]
+        if regex != "":
+            try:
+                for line in sim.generate_response()["choices"][0]["message"]["content"].split("\n"):
+                    regexp_results = re.search(regex, line)
+                    if regexp_results:
+                        regex_numbered_explanation.append(
+                            {line: regexp_results.groups()}
+                        )
+                        regex_named_explanation.append(regexp_results.groupdict())
+            except Exception as e:
+                print(e)
         result = {
             "gpt_explanation": sim.generate_response()["choices"][0]["message"][
                 "content"
             ],
-            "regex_numbered_explanation": "",
-            "regex_named_explanation": "",
+            "regex_numbered_explanation": regex_named_explanation,
+            "regex_named_explanation": regex_named_explanation,
         }
         return result
 
