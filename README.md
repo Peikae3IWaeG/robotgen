@@ -1,13 +1,15 @@
 # Codebundle generator
 <img src="img/computer_robot.png" alt="drawing" width="200"/>
 
-Codebundle Generator is the easiest way to generate your Robot Framework Codebundles with a user-friendly web interface. 
+Codebundle Generator is the easiest way to generate your Robot Framework based [CLI Codebundles](https://docs.runwhen.com/public/runwhen-platform/code-bundles). 
+[Get some examples here](https://github.com/runwhen-contrib/rw-cli-codecollection). with a user-friendly web interface. 
 
 Supercharged by ChatGPT.
 
+# Disclaimer
+This is only a simple prototype, the code is untested and unstable. Workspace state is ephemeral. Inputs are not validated.
 
 # Table of Contents
-* [About](#About)
 * [Features](#Features)
 * [Functionalities](#Functionalities)
 * [Coming soon](#Coming-soon)
@@ -15,14 +17,6 @@ Supercharged by ChatGPT.
 * [Features suggestions](#Features-suggestions)
 * [License](#License)
 
-
-# About
-ChatGPT-boosted WebUI for generating [CLI Codebundles](https://docs.runwhen.com/public/runwhen-platform/code-bundles). 
-[Get some examples here](https://github.com/runwhen-contrib/rw-cli-codecollection).
-
-
-# Disclaimer
-This is only a simple prototype, the code is untested and unstable. Workspace state is ephemeral. Inputs are not validated.
 # Features
 ## Codebundles generation made even easier
 Writing Codebundles using Robot framework [is very easy and intuitive](https://robocorp.com/docs/languages-and-frameworks/robot-framework/cheat-sheet). But why not to use GUI to save some time familiarizing with the syntax and exploring Keywords documentation. Don't burn your time on writing everything from scrach. Turn your ideas into codebundles quickly, and tune them later! 
