@@ -9,6 +9,8 @@ Supercharged by ChatGPT.
 # Table of Contents
 * [About](#About)
 * [Features](#Features)
+* [Functionalities](#Functionalities)
+* [Coming soon](#Coming-soon)
 * [Installation guide](#Installation-guide)
 * [Features suggestions](#Features-suggestions)
 * [License](#License)
@@ -54,6 +56,9 @@ Simply describe conditions when the issue should be raised. Review and submit th
 * Raising issues based on the previously defined commands results 
 * [Stdout parser support](https://github.com/runwhen-contrib/rw-cli-codecollection/blob/main/libraries/RW/CLI/stdout_parser.py)
 
+# Coming soon
+* More LLM-based features
+* Local codecollection development environment integration. Try it, run dev environment from this branch [generator api](https://github.com/Peikae3IWaeG/rw-cli-codecollection/tree/generator-api-m1#running-api) follow readme instructions and click on ▶️ button in Codebundle Generator web UI.
 # Installation guide
 ## Clone repository 
 ```bash
