@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HelpIcon from "../helpIcon";
-
+import Slider from '@mui/material/Slider';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#black" : "#fff",
   ...theme.typography.body2,
@@ -24,8 +24,21 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const handleAssertionChange = (index, field, value) => { };
 
+const marks = [
+  {
+    value: 0,
+    label: 'deterministic'
+  },
+  {
+    value: 2,
+    label: 'random'
+  },
+]
+
 const ApiRequestComponent = () => {
   const [inputText, setInputText] = useState("");
+  const [temperature, setTemperature] = useState(0.1);
+
   const [command, setCommand] = useState({
     command: 1
   });
@@ -81,7 +94,9 @@ const ApiRequestComponent = () => {
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
-
+  const handleTemperatureChange = (event) => {
+    setTemperature(event.target.value);
+  };
 
   const handleCommandChange = (event) => {
     const { name, value } = event.target;
@@ -116,7 +131,7 @@ const ApiRequestComponent = () => {
 
     const requestBody = JSON.stringify({
       text: inputText,
-      temperature: 0.1,
+      temperature: temperature,
       additional_info: "",
     });
 
@@ -156,16 +171,27 @@ const ApiRequestComponent = () => {
           <HelpIcon info="Describe the conditions when an issue should be raised. I.e 'Raise an issue if command output contains word pending'. Use the generated response as an entrypoint for further tuning. "></HelpIcon>
         </p>
         <TextField
-          label="Input"
+          label="Raise an issue if line contains CrashLoopBackOff"
           variant="outlined"
           value={inputText}
           onChange={handleInputChange}
         />
-        <p></p>
+        <p>Temperature
+          <HelpIcon info="Change temperature values to get different results"></HelpIcon>
+        </p>
+        <Slider aria-label="Temperature"
+          sx={{ width: "100%" }}
+          value={temperature}
+          step={0.1}
+          marks={marks}
+          valueLabelDisplay="auto"
+          min={0}
+          max={2}
+          onChange={handleTemperatureChange} />
+
         <Button variant="contained" onClick={handleApiRequest}>
           Generate with ChatGPT
         </Button>
-
         {formData && (
           <Button variant="contained" onClick={() => setFormData(null)}>
             Clear Form

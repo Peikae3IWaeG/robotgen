@@ -87,9 +87,7 @@ export default function BasicTabs() {
           <Typography variant="h7" color="primary">
             <p>
               Creates an issue when conditions specified in assertions section
-              are fulfilled. At least one assertion must be specified. Once
-              ChatGPT mode is added, it will be a default method of generating
-              issues.
+              are fulfilled.
             </p>
           </Typography>
           <BasicAccordion></BasicAccordion>
