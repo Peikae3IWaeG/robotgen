@@ -28,6 +28,10 @@ Supercharge your productivity, simulate commands output and test your regexes.
 <img src="img/presets.gif" alt="command"/></img>
 Use presets to prepare your workspace and focus on what delivers the actual value.
 
+Click on `Add in kubectl preset` if you use kubectl commans to ensure all the configuration is setup for you.
+
+More presents coming soon.
+
 ### Use natural language to describe issues
 Simply describe conditions when the issue should be raised. Review and submit the response. 
 <img src="img/raise_issue.gif" alt="issue"/></img>
@@ -60,7 +64,7 @@ git clone git@github.com:Peikae3IWaeG/robotgen.git
 cd robotgen
 ```
 ## Docker
-### Create .env file and set variables
+### Create .env file and set your OpenAI api key
 ```bash
 cp .env.example .env
 ```
@@ -79,7 +83,7 @@ Docker compose setup supports hot code reload.
 ```bash
 cd back
 pip install -r requirements.txt
-python main.py
+OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" python main.py
 ```
 ### Frontend
 ```bash
