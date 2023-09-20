@@ -35,6 +35,10 @@ const IssueForm = () => {
     assertions: [
       { target: "_line", condition: "_raise_issue_if_eq", value: "" },
     ],
+    issue_details: "",
+    issue_title: "",
+    issue_expected: "",
+    issue_actual: "",
   });
 
   const [items, setItems] = useState([]);
@@ -141,10 +145,43 @@ const IssueForm = () => {
             id="standard-basic"
             required
             type="text"
-            name="description"
-            value={issueData.description}
+            name="issue_title"
+            value={issueData.issue_title}
+            onChange={handleInputChange}
+            label="Issue title"
+            variant="standard"
+          />
+        </FormGroup>
+        <FormGroup>
+          <TextField
+            id="standard-basic"
+            type="text"
+            name="issue_expected"
+            value={issueData.issue_expected}
             onChange={handleInputChange}
             label="Describe healthy state"
+            variant="standard"
+          />
+        </FormGroup>
+        <FormGroup>
+          <TextField
+            id="standard-basic"
+            type="text"
+            name="issue_actual"
+            value={issueData.issue_actual}
+            onChange={handleInputChange}
+            label="Describe unhealthy state"
+            variant="standard"
+          />
+        </FormGroup>
+        <FormGroup>
+          <TextField
+            id="standard-basic"
+            type="text"
+            name="issue_details"
+            value={issueData.issue_details}
+            onChange={handleInputChange}
+            label="Describe issue details"
             variant="standard"
           />
         </FormGroup>
