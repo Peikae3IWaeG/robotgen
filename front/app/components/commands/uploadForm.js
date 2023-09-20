@@ -1,4 +1,6 @@
 "use client";
+import IconButton from "@mui/material/IconButton";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import React, { useState } from "react";
 import { Box } from "@mui/material";
@@ -13,9 +15,8 @@ const CommandForm = () => {
     command: "",
     regex: "",
   });
-
+  const [regexResult, setRegexResult] = useState(null);
   const [outputData, setOutputData] = useState(null);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -55,6 +56,25 @@ const CommandForm = () => {
         setOutputData(data);
       })
       .catch((error) => console.error("Error adding entry:", error));
+  };
+
+  const handleRegexRequest = () => {
+    if (outputData && outputData.gpt_explanation) {
+      fetch("http://localhost:5127/gpt/regex_by_text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: outputData.gpt_explanation }),
+      })
+        .then((response) => response.json())
+        .then((regexData) => {
+          setRegexResult(regexData.gpt_explanation);
+          console.log(JSON.parse(JSON.stringify(regexData.gpt_explanation)));
+          setRegexResult(JSON.parse(JSON.stringify(regexData.gpt_explanation)));
+        })
+        .catch((error) => console.error("Error fetching regex result:", error));
+    }
   };
 
   return (
@@ -121,19 +141,53 @@ const CommandForm = () => {
       </FormControl>
 
       {outputData && (
-        <Item>
-          <h3>Simulated Output</h3>
-          <pre>{outputData.gpt_explanation}</pre>
-          <h3>Regex numbered groups catches</h3>
-          <pre>
-            {JSON.stringify(outputData.regex_numbered_explanation, null, 2)}
-          </pre>
+        <Box>
+          <Box>
+            <h3>
+              Simulated Output
+              <HelpIcon info="This is only a ChatGPT-generated simulation of the command and can be inaccurate."></HelpIcon>
+            </h3>
+          </Box>
+          <Item sx={{ overflow: "auto" }}>
+            <pre>{outputData.gpt_explanation}</pre>
+          </Item>
+          {outputData && outputData.gpt_explanation && (
+            <Box textAlign="center">
+              <p></p>
+              <Button variant="contained" onClick={handleRegexRequest}>
+                Guess regex
+              </Button>
+            </Box>
+          )}
 
-          <h3>Regex named groups catches</h3>
-          <pre>
-            {JSON.stringify(outputData.regex_named_explanation, null, 2)}
-          </pre>
-        </Item>
+          {regexResult && (
+            <Box>
+              <h3>
+                Regex result
+                <HelpIcon info="Copy generated regex and run simulation again. You can also use regex101 to manually adjust the regex. "></HelpIcon>
+              </h3>
+              <Item sx={{ overflow: "auto" }}>
+                <IconButton
+                  onClick={() => navigator.clipboard.writeText(regexResult)}
+                  aria-label="delete"
+                >
+                  {" "}
+                  <ContentCopyIcon /> Copy{" "}
+                </IconButton>
+                <pre>{regexResult}</pre>
+              </Item>
+              <p></p>
+              <Box textAlign="center"></Box>
+            </Box>
+          )}
+
+          <h3>Regex groups catches</h3>
+          <Item sx={{ overflow: "auto" }}>
+            <pre>
+              {JSON.stringify(outputData.regex_numbered_explanation, null, 2)}
+            </pre>
+          </Item>
+        </Box>
       )}
     </div>
   );
