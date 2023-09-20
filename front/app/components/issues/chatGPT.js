@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HelpIcon from "../helpIcon";
-import Slider from '@mui/material/Slider';
+import Slider from "@mui/material/Slider";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#black" : "#fff",
   ...theme.typography.body2,
@@ -22,32 +22,31 @@ const Item = styled(Paper)(({ theme }) => ({
 
   color: theme.palette.text.secondary,
 }));
-const handleAssertionChange = (index, field, value) => { };
+const handleAssertionChange = (index, field, value) => {};
 
 const marks = [
   {
     value: 0,
-    label: 'deterministic'
+    label: "deterministic",
   },
   {
     value: 2,
-    label: 'random'
+    label: "random",
   },
-]
+];
 
 const ApiRequestComponent = () => {
   const [inputText, setInputText] = useState("");
   const [temperature, setTemperature] = useState(0.1);
 
   const [command, setCommand] = useState({
-    command: 1
+    command: 1,
   });
   const [apiResponse, setApiResponse] = useState({
     severity: 1,
     response: "",
     description: "",
-    assertions: [
-    ],
+    assertions: [],
   });
 
   const [formData, setFormData] = useState(null);
@@ -75,7 +74,7 @@ const ApiRequestComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Sending API request:", issueData);
-    apiResponse.response = command.response
+    apiResponse.response = command.response;
     fetch("http://localhost:5127/issue/", {
       method: "POST",
       headers: {
@@ -102,7 +101,6 @@ const ApiRequestComponent = () => {
     const { name, value } = event.target;
     setCommand((prevData) => ({ ...prevData, [name]: value }));
   };
-
 
   const handleGeneratedInputChange = (event) => {
     const { name, value } = event.target;
@@ -143,17 +141,15 @@ const ApiRequestComponent = () => {
       body: requestBody,
     })
       .then((response) => response.json())
-      .then((data) =>
-        setApiResponse(data),
-      )
+      .then((data) => setApiResponse(data))
       .catch((error) => console.error(error));
   };
 
   return (
     <div>
       <FormControl fullWidth>
-
-        <p>Command
+        <p>
+          Command
           <HelpIcon info="Choose one of previously defined commands for evaluation"></HelpIcon>
         </p>
         <FormGroup>
@@ -167,7 +163,8 @@ const ApiRequestComponent = () => {
             ))}
           </Select>
         </FormGroup>
-        <p>ChatGPT prompt
+        <p>
+          ChatGPT prompt
           <HelpIcon info="Describe the conditions when an issue should be raised. I.e 'Raise an issue if command output contains word pending'. Use the generated response as an entrypoint for further tuning. "></HelpIcon>
         </p>
         <TextField
@@ -176,10 +173,12 @@ const ApiRequestComponent = () => {
           value={inputText}
           onChange={handleInputChange}
         />
-        <p>Temperature
+        <p>
+          Temperature
           <HelpIcon info="Change temperature values to get different results"></HelpIcon>
         </p>
-        <Slider aria-label="Temperature"
+        <Slider
+          aria-label="Temperature"
           sx={{ width: "100%" }}
           value={temperature}
           step={0.1}
@@ -187,7 +186,8 @@ const ApiRequestComponent = () => {
           valueLabelDisplay="auto"
           min={0}
           max={2}
-          onChange={handleTemperatureChange} />
+          onChange={handleTemperatureChange}
+        />
 
         <Button variant="contained" onClick={handleApiRequest}>
           Generate with ChatGPT
@@ -200,13 +200,7 @@ const ApiRequestComponent = () => {
         {apiResponse && (
           <div>
             <h4>Preview</h4>
-            <p>
-              {apiResponse && (
-
-                JSON.stringify(apiResponse)
-              )
-              }
-            </p>
+            <p>{apiResponse && JSON.stringify(apiResponse)}</p>
             Severity
             <FormGroup>
               <Select
@@ -224,14 +218,55 @@ const ApiRequestComponent = () => {
               </Select>
             </FormGroup>
             <FormGroup>
+              <Typography variant="h7" color="primary">
+                <p>Issue title</p>
+              </Typography>
               <TextField
                 id="standard-basic"
-                required
                 type="text"
-                name="description"
-                value={apiResponse.description}
-                onChange={handleGeneratedInputChange}
-                label="Describe healthy state"
+                name="issue_title"
+                value={apiResponse.issue_title}
+                onChange={handleInputChange}
+                variant="standard"
+              />
+            </FormGroup>
+            <Typography variant="h7" color="primary">
+              <p>Healthy state description</p>
+            </Typography>
+            <FormGroup>
+              <TextField
+                id="standard-basic"
+                type="text"
+                name="issue_expected"
+                value={apiResponse.issue_expected}
+                onChange={handleInputChange}
+                label=""
+                variant="standard"
+              />
+            </FormGroup>
+            <Typography variant="h7" color="primary">
+              <p>Unhealthy state description</p>
+            </Typography>{" "}
+            <FormGroup>
+              <TextField
+                id="standard-basic"
+                type="text"
+                name="issue_actual"
+                value={apiResponse.issue_actual}
+                onChange={handleInputChange}
+                variant="standard"
+              />
+            </FormGroup>
+            <Typography variant="h7" color="primary">
+              <p>Issue details</p>
+            </Typography>
+            <FormGroup>
+              <TextField
+                id="standard-basic"
+                type="text"
+                name="issue_details"
+                value={apiResponse.issue_details}
+                onChange={handleInputChange}
                 variant="standard"
               />
             </FormGroup>

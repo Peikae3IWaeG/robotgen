@@ -24,7 +24,7 @@ export default function BasicAccordion() {
           <ApiRequestComponent></ApiRequestComponent>
         </AccordionDetails>
       </Accordion>
-      <Accordion >
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -36,7 +36,6 @@ export default function BasicAccordion() {
           <IssueForm></IssueForm>
         </AccordionDetails>
       </Accordion>
-
     </div>
   );
 }
