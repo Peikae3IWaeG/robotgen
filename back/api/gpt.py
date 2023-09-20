@@ -238,8 +238,12 @@ class RobotDump(Resource):
         """Generate regex based on the command output"""
         sim = GPTRegex(user=api.payload["text"])
         sim.temperature = 0.2
-
-        return sim.generate_response()
+        result = {
+            "gpt_explanation": sim.generate_response()["choices"][0]["message"]["content"]
+        }
+        logging.info(result)
+        return result
+    
 
 
 @api.route("/issue")
