@@ -40,6 +40,11 @@ Simply describe conditions when the issue should be raised. Review and submit th
 
 Local codecollection development environment integration. Try it, run dev environment from this branch [generator api](https://github.com/Peikae3IWaeG/rw-cli-codecollection/tree/generator-api-m1#running-api) follow readme instructions and click on ▶️ button in Codebundle Generator web UI.
 
+## Make AI guess your regex
+<img src="img/regex_generation.gif" alt="regex generation"/></img>
+
+Click on `guess regex` button and enjoy the magic. 
+
 # Functionalities
 ## Tasks 
 * User can operate within a single task
@@ -48,6 +53,7 @@ Local codecollection development environment integration. Try it, run dev enviro
 * Simulating command output
 * Parsing command with a regex
 * Listing and removing commands from the workspace
+* Guessing a regex based on the simulated command output
 
 ## Variables/Secrets
 * Creating and deleting variables and secrets 
