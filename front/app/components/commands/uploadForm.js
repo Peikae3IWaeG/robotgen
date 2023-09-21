@@ -9,11 +9,14 @@ import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import HelpIcon from "../helpIcon";
 import Item from "../paperitem";
+import DialogComponent from "./regexDialog";
+import Typography from "@mui/material/Typography";
 const CommandForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     command: "",
     regex: "",
+    additional_info: "",
   });
   const [regexResult, setRegexResult] = useState(null);
   const [outputData, setOutputData] = useState(null);
@@ -110,6 +113,18 @@ const CommandForm = () => {
             sx={{ width: "70%" }}
             id="standard-basic"
             type="text"
+            name="additional_info"
+            value={formData.additional_info}
+            onChange={handleInputChange}
+            label="Optionally describe the simulated output in details"
+            variant="standard"
+          />
+          <HelpIcon info="I.e. if you used `kubectl get pods command`, you can tell ChatGPT to make sure that output contains crashing pods by simply writing down `one of the pods should be in CrashLoopBackOff state` "></HelpIcon>
+
+          <TextField
+            sx={{ width: "70%" }}
+            id="standard-basic"
+            type="text"
             name="regex"
             value={formData.regex}
             onChange={handleInputChange}
@@ -117,13 +132,15 @@ const CommandForm = () => {
             variant="standard"
           />
           <HelpIcon info="Use this field if you want to test your regex against simulated output. Regex should contain groups, it's best if they're named."></HelpIcon>
-          <Button
-            variant="contained"
-            target="_blank"
-            href="https://regex101.com/"
-          >
-            Regex101
-          </Button>
+          <p></p>
+          <Typography variant="p" color="primary">
+            You can compose regex with ChatGPT-powered form, try to write it
+            manually, or simulate the command output and then generate a regex
+            based on the simulated output by clicking the button on the bottom.
+          </Typography>
+
+          <DialogComponent></DialogComponent>
+
           <Box textAlign="center">
             <Button onClick={handleSubmitGpt} type="submit">
               Simulate the output

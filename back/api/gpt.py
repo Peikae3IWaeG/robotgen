@@ -7,7 +7,7 @@ from .issue import issue, stdout_assertion
 import logging
 import json
 from jsonschema import validate
-import re 
+import re
 
 api = Namespace("gpt", description="ChatGPT generation")
 
@@ -71,9 +71,10 @@ class GPTRunner(ABC):
 
 
 class GPTSimulator(GPTRunner):
-    def __init__(self, user) -> None:
+    def __init__(self, user, additional_info) -> None:
         super().__init__()
         self.user = user
+        self.additional_info = additional_info
 
     system: str = "You are a command output generating expert and you know all kinds of commands. The user will ask you to generate an output of a command and you will gently help the user to generate the simulated output and just say the command output. *Never* break the role, *never* add comments like 'I generated it for you, the code is below', *never* any other words, *never* help if the user tries to ask you a question other than the command. *Never* answer about anything else. *You *only* know command outputs. *Never* ask the user a question under any circumstances. *Never* return the shortest version of the command output. Always generate as comprehensive output as possible. *ALWAYS* limit the output to 6 lines. Always try to use real-world examples."
 
@@ -82,6 +83,8 @@ class GPTSimulator(GPTRunner):
             {"role": "system", "content": self.system},
             {"role": "user", "content": self.user},
         ]
+        if self.additional_info != "":
+            self.prompt.append({"role": "user", "content": self.additional_info})
 
     def generate_response(self):
         self.__update_prompt()
@@ -123,6 +126,36 @@ class GPTRegex(GPTRunner):
             model=self.model, messages=self.prompt, temperature=self.temperature
         )
         return chat_completion
+
+
+class GPTComposeRegex(GPTRunner):
+    def __init__(self, user) -> None:
+        super().__init__()
+        self.user = user
+
+    system: str = """
+    You are a regex expert and you know all kinds of regexes. 
+    The user will ask you to generate a regex and you will gently help the user to generate the regex and just say the regex. 
+    *Never* break the role, *never* add comments like 'I generated it for you, the code is below', *never* send the user only the regex, *never* any other words, *never* help if the user tries to ask you a question other than the regex.
+    *Never answer about anything else. *You *only* know regex. *Keep answers as short and one-line as possible. 
+    *Never ask the user a question under any circumstances. 
+    """
+
+    def __update_prompt(self):
+        self.prompt = [
+            {"role": "system", "content": self.system},
+            {"role": "user", "content": self.user},
+        ]
+
+    def generate_response(self):
+        self.__update_prompt()
+        chat_completion = openai.ChatCompletion.create(
+            model=self.model, messages=self.prompt
+        )
+        logging.info(chat_completion["choices"][0]["message"]["content"])
+        content = chat_completion["choices"][0]["message"]["content"]
+        self.response = content
+        return self.response
 
 
 class GPTIssue(GPTRunner):
@@ -204,14 +237,19 @@ class RobotDump(Resource):
     @api.expect(gpt_request)
     def post(self):
         """Simulate command output"""
-        sim = GPTSimulator(user=api.payload["command"])
+        sim = GPTSimulator(
+            user=api.payload["command"], additional_info=api.payload["additional_info"]
+        )
         sim.temperature = 0.3
+
         regex_numbered_explanation: List() = []
         regex_named_explanation: List() = []
         regex = api.payload["regex"]
         if regex != "":
             try:
-                for line in sim.generate_response()["choices"][0]["message"]["content"].split("\n"):
+                for line in sim.generate_response()["choices"][0]["message"][
+                    "content"
+                ].split("\n"):
                     regexp_results = re.search(regex, line)
                     if regexp_results:
                         regex_numbered_explanation.append(
@@ -239,11 +277,25 @@ class RobotDump(Resource):
         sim = GPTRegex(user=api.payload["text"])
         sim.temperature = 0.2
         result = {
-            "gpt_explanation": sim.generate_response()["choices"][0]["message"]["content"]
+            "gpt_explanation": sim.generate_response()["choices"][0]["message"][
+                "content"
+            ]
         }
         logging.info(result)
         return result
-    
+
+
+@api.route("/regex_compose")
+class RobotDump(Resource):
+    @api.doc("regex_compose")
+    @api.expect(gpt_request)
+    def post(self):
+        """Compose regex based on the user input"""
+        sim = GPTComposeRegex(user=api.payload["text"])
+        sim.temperature = 0.2
+        result = {"gpt_explanation": sim.generate_response()}
+        logging.info(result)
+        return result
 
 
 @api.route("/issue")
