@@ -245,12 +245,12 @@ class RobotDump(Resource):
         regex_numbered_explanation: List() = []
         regex_named_explanation: List() = []
         regex = api.payload["regex"]
+        response = sim.generate_response()["choices"][0]["message"]["content"]
         if regex != "":
             try:
-                for line in sim.generate_response()["choices"][0]["message"][
-                    "content"
-                ].split("\n"):
+                for line in response.split("\n"):
                     regexp_results = re.search(regex, line)
+                    logging.info(regexp_results)
                     if regexp_results:
                         regex_numbered_explanation.append(
                             {line: regexp_results.groups()}
@@ -259,9 +259,7 @@ class RobotDump(Resource):
             except Exception as e:
                 print(e)
         result = {
-            "gpt_explanation": sim.generate_response()["choices"][0]["message"][
-                "content"
-            ],
+            "gpt_explanation": response,
             "regex_numbered_explanation": regex_named_explanation,
             "regex_named_explanation": regex_named_explanation,
         }
