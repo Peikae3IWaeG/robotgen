@@ -45,6 +45,15 @@ Local codecollection development environment integration. Try it, run dev enviro
 
 Click on `guess regex` button and enjoy the magic. 
 
+## Compose your own regexes
+<img src="img/regex-composition.gif" alt="regex composition"/></img>
+
+Use natural language to describe the regex you need.
+
+## Adjust simulated output
+<img src="img/command-sim-tune.gif" alt="regex composition"/></img>
+
+Impact the simulated output by describing the expected content.
 # Functionalities
 ## Tasks 
 * User can operate within a single task
@@ -54,6 +63,7 @@ Click on `guess regex` button and enjoy the magic.
 * Parsing command with a regex
 * Listing and removing commands from the workspace
 * Guessing a regex based on the simulated command output
+* Generating regex based on natural language description
 
 ## Variables/Secrets
 * Creating and deleting variables and secrets 
