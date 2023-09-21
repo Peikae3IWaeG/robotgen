@@ -15,7 +15,7 @@ import { Grid, Box } from "@mui/material";
 
 const DialogComponent = () => {
   const [regexFormData, setRegexFormData] = useState({
-    text: "Generate a regex that catches everything",
+    text: "",
   });
 
   const [result, setResultData] = useState(null);
@@ -91,13 +91,15 @@ const DialogComponent = () => {
                   <form onSubmit={handleRegexSubmit}>
                     <TextField
                       sx={{ width: "90%" }}
-                      id="standard-basic"
+                      id="standard-multiline"
                       required
                       type="text"
                       name="text"
+                      multiline
+                      rows={2}
                       value={regexFormData.text}
                       onChange={handleRegexInputChange}
-                      label="Name"
+                      label="Input"
                       variant="standard"
                     />
                     <p></p>
@@ -105,7 +107,7 @@ const DialogComponent = () => {
                       <Button variant="contained" onClick={handleRegexSubmit}>
                         Generate
                       </Button>
-                      <HelpIcon info="I.e. 'Generate the regext that will catch data in format YYYY-MM-DD. Year month and day should be placed in separate named groups.' This in only an example, consider parsing date the proper way."></HelpIcon>
+                      <HelpIcon info="I.e. 'Generate the regex that catches data in format %Y-%m-%d. Year month and day should be placed in separate named groups.' This in only an example, consider parsing date the proper way."></HelpIcon>
                     </Box>
                   </form>
                 </FormControl>
