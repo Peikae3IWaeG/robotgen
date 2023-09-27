@@ -85,11 +85,11 @@ git clone git@github.com:Peikae3IWaeG/robotgen.git
 cd robotgen
 ```
 ## Docker
-### Create .env file and set your OpenAI api key
+### Create .env file and set variables
 ```bash
 cp .env.example .env
 ```
-
+In order to use Codebundle Generator you must have an OpenAI account with an API key generated. In case of any problems please refer to [OpenAI documentation](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key).
 ### Build and run containers
 ```bash
 docker compose up
