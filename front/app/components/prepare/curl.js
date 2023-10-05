@@ -11,7 +11,7 @@ const KubectlPreparer = () => {
       {
         endpoint: "http://localhost:5127/variables/service",
         payload: {
-          name: "kubectl",
+          name: "curl",
           description: "The location service used to interpret shell commands.",
           example: "curl-service.shared",
           default: "curl-service.shared",

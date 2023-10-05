@@ -158,7 +158,7 @@ class RwCliRunCli(KeywordCallGenerator):
         variable="",
         cmd: str = "string",
         render_in_commandlist: bool = True,
-        target_service: any = "${kubectl}",
+        target_service: str = "${kubectl}",
         secret_file__kubeconfig: any = "${kubeconfig}",
         env: any = "${env}",
     ) -> None:
@@ -167,7 +167,7 @@ class RwCliRunCli(KeywordCallGenerator):
             "cmd": cmd,
             "render_in_commandlist": render_in_commandlist,
             "target_service": target_service,
-            "secret_file__kubeconfig": secret_file__kubeconfig,
+            # "secret_file__kubeconfig": secret_file__kubeconfig,
             "env": env,
         }
 

@@ -10,7 +10,10 @@ import Toolbar from "@mui/material/Toolbar";
 
 const RobotDataDisplay = () => {
   const [apiData, setApiData] = useState("");
-  const [outputData = { status: "unknown" }, setOutputData] = useState(null);
+  const [
+    outputData = { status: "unknown", log_html_url: "", report_html_url: "" },
+    setOutputData,
+  ] = useState(null);
 
   const handleDrop = () => {
     fetch("http://localhost:5127/robot/drop", {
@@ -86,10 +89,10 @@ const RobotDataDisplay = () => {
         <Item>
           <h3>Status: {outputData["status"]}</h3>
           <h3>
-            <a href="http://127.0.0.1:8001/log">Log</a>
+            <a href={outputData["log_html_url"]}>Log</a>
           </h3>
           <h3>
-            <a href="http://127.0.0.1:8001/report">Report</a>
+            <a href={outputData["report_html_url"]}>Report</a>
           </h3>
         </Item>
       )}{" "}

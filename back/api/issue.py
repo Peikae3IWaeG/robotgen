@@ -109,7 +109,7 @@ class IssueResource(object):
                         set_issue_expected=issue["issue_expected"],
                         set_issue_details=issue["issue_details"],
                         set_issue_actual=issue["issue_actual"],
-                        set_issue_title=issue['issue_title'],
+                        set_issue_title=issue["issue_title"],
                         extra_kwargs=dict_kwargs,
                     )
                 )
