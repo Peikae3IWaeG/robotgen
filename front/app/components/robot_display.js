@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import Box from "@mui/material/Box";
 import Item from "./paperitem";
-import Toolbar from "@mui/material/Toolbar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RobotDataDisplay = () => {
   const [apiData, setApiData] = useState("");
+  const [isRunLoading, setRunLoading] = useState(false);
   const [
     outputData = { status: "unknown", log_html_url: "", report_html_url: "" },
     setOutputData,
@@ -32,6 +32,7 @@ const RobotDataDisplay = () => {
       );
   };
   const handleRun = () => {
+    setRunLoading(true);
     fetch("http://localhost:5127/robot/run", {
       method: "GET",
       headers: {
@@ -40,6 +41,7 @@ const RobotDataDisplay = () => {
     })
       .then((response) => response.json())
       .then((response) => {
+        setRunLoading(false);
         setOutputData(response);
       })
       .catch((error) =>
@@ -62,14 +64,18 @@ const RobotDataDisplay = () => {
 
   return (
     <div>
-      <IconButton
-        sx={{ marginRight: "auto" }}
-        onClick={() => handleRun()}
-        aria-label="Run"
-      >
-        {" "}
-        <PlayArrowIcon /> Run{" "}
-      </IconButton>
+      {isRunLoading ? (
+        <CircularProgress></CircularProgress>
+      ) : (
+        <IconButton
+          sx={{ marginRight: "auto" }}
+          onClick={() => handleRun()}
+          aria-label="Run"
+        >
+          {" "}
+          <PlayArrowIcon /> Run{" "}
+        </IconButton>
+      )}
       <IconButton
         onClick={() => navigator.clipboard.writeText(apiData)}
         aria-label="delete"
@@ -98,14 +104,18 @@ const RobotDataDisplay = () => {
       )}{" "}
       {/* {outputData.map(outputData => <div>{outputData.status}</div>)} */}
       <pre>{apiData}</pre>
-      <IconButton
-        sx={{ marginRight: "auto" }}
-        onClick={() => handleRun()}
-        aria-label="Run"
-      >
-        {" "}
-        <PlayArrowIcon /> Run{" "}
-      </IconButton>
+      {isRunLoading ? (
+        <CircularProgress></CircularProgress>
+      ) : (
+        <IconButton
+          sx={{ marginRight: "auto" }}
+          onClick={() => handleRun()}
+          aria-label="Run"
+        >
+          {" "}
+          <PlayArrowIcon /> Run{" "}
+        </IconButton>
+      )}
       <IconButton
         onClick={() => navigator.clipboard.writeText(apiData)}
         aria-label="delete"
