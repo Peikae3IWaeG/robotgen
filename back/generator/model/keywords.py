@@ -172,15 +172,18 @@ class RwCliRunCli(KeywordCallGenerator):
             "cmd": cmd,
             "render_in_commandlist": render_in_commandlist,
             "target_service": target_service,
-            # "secret_file__kubeconfig": secret_file__kubeconfig,
         }
-        secrets_kwargs = dict(
-            [(f"secret__{secret}", f"${{{secret}}}") for secret in secrets]
-        )
+
+        if "kubectl" in cmd.lower():
+            kwargs.update({"secret_file__kubeconfig": "${kubeconfig}"})
+        else:
+            secrets_kwargs = dict(
+                [(f"secret__{secret}", f"${{{secret}}}") for secret in secrets]
+            )
+            kwargs.update(secrets_kwargs)
 
         if len([env for env in envs]) > 0:
             kwargs.update({"env": "${env}"})
-        kwargs.update(secrets_kwargs)
         self.kwargs = kwargs
 
 
