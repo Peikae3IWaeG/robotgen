@@ -59,6 +59,8 @@ class CommandResource(object):
                 return "${gcloud}"
             if "curl" in value.lower():
                 return "${curl}"
+            if "aws" in value.lower():
+                return "${aws}"
         return "${kubectl}" #fallback
     
     def _configure_kubernetes(self, data):
