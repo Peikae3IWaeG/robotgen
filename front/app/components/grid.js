@@ -19,22 +19,12 @@ import ObjectiveForm from "../components/objective";
 import BasicTabs from "./tabbedForms";
 import DataTablesTabs from "./tabbedTables";
 import MenuBar from "./menubar";
+
+import AWSPreparer from "./prepare/aws";
+
 export default function MyGrid(props) {
-  const {
-    secretsTable,
-    secretsForm,
-    variablesForm,
-    variablesTable,
-    issueForm,
-    issueTable,
-    commandForm,
-    commandTable,
-    robotDataDisplay,
-    prepareKubectl,
-    prepareCurl,
-    prepareGcloud,
-    resetRobot,
-  } = props;
+  const { robotDataDisplay, prepareKubectl, prepareCurl, prepareGcloud } =
+    props;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -76,6 +66,9 @@ export default function MyGrid(props) {
                 </Grid>
                 <Grid item m={1} xs={2}>
                   {prepareCurl}
+                </Grid>
+                <Grid item m={1} xs={2}>
+                  <AWSPreparer></AWSPreparer>
                 </Grid>
               </Grid>
             </Item>
