@@ -4,6 +4,8 @@ from robot.parsing.model.statements import KeywordCall
 from robot.parsing.lexer.tokens import Token
 from typing import List
 
+import logging
+
 
 def flatten(l):
     return [item for sublist in l for item in sublist]
@@ -159,17 +161,27 @@ class RwCliRunCli(KeywordCallGenerator):
         cmd: str = "string",
         render_in_commandlist: bool = True,
         target_service: str = "${kubectl}",
-        secret_file__kubeconfig: any = "${kubeconfig}",
-        env: any = "${env}",
+        secrets: any = [],
+        secert_files: any = [],
+        envs: any = [],
+        # secret_file__kubeconfig: any = "${kubeconfig}",
     ) -> None:
         super().__init__(assign_to_variable, variable)
-        self.kwargs = {
+
+        kwargs = {
             "cmd": cmd,
             "render_in_commandlist": render_in_commandlist,
             "target_service": target_service,
             # "secret_file__kubeconfig": secret_file__kubeconfig,
-            "env": env,
         }
+        secrets_kwargs = dict(
+            [(f"secret__{secret}", f"${{{secret}}}") for secret in secrets]
+        )
+
+        if len([env for env in envs]) > 0:
+            kwargs.update({"env": "${env}"})
+        kwargs.update(secrets_kwargs)
+        self.kwargs = kwargs
 
 
 class RwCliParseCliOutputByLine(KeywordCallGenerator):

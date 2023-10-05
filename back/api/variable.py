@@ -157,6 +157,9 @@ class EnvironmentVariableResource(object):
                 )
         return body
 
+    def dump_variables(self) -> List:
+        return [x for x in self.variables]
+
 
 VariableDataResource = VariableResource()
 EnvironmentVariableDataResource = EnvironmentVariableResource()

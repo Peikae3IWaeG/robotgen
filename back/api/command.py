@@ -7,7 +7,7 @@ from flask_restx import Resource, fields, api, Namespace, OrderedModel, reqparse
 from typing import List
 from robot.variables.assigner import VariableAssigner
 from api.variable import VariableDataResource as VResource
-
+from api.variable import EnvironmentVariableDataResource as EVResource
 import requests
 
 api = Namespace("command", description="Command related operations")
@@ -18,7 +18,7 @@ command = api.model(
         "name": fields.String(required=True),
         "command": fields.String(required=False),
         "regex": fields.String(required=False, default=""),
-        "target_service": fields.String(required=False, default="")
+        "target_service": fields.String(required=False, default=""),
     },
 )
 
@@ -40,7 +40,7 @@ class CommandResource(object):
         self._name_validator(data["name"])
         self._command_validator(data["command"])
         self._regex_validator(data["regex"])
-        data['target_service'] = self._target_service_mutator(data['command'])
+        data["target_service"] = self._target_service_mutator(data["command"])
         self.commands.append(data)
 
     def dump_regex(self, name, regex):
@@ -61,11 +61,11 @@ class CommandResource(object):
                 return "${curl}"
             if "aws" in value.lower():
                 return "${aws}"
-        return "${kubectl}" #fallback
-    
+        return "${kubectl}"  # fallback
+
     def _configure_kubernetes(self, data):
-        pass 
-    
+        pass
+
     def _configure_gcloud(self, data):
         pass
 
@@ -93,13 +93,18 @@ class CommandResource(object):
     def dump(self) -> TaskSectionGenerator:
         if len(self.commands) > 0:
             body = []
+            secrets = [x["name"] for x in VResource.dump_secret_variables()]
+            envs = [x["name"] for x in EVResource.dump_variables()]
+
             for x in self.commands:
                 body.append(
                     RwCliRunCli(
                         assign_to_variable=True,
                         variable=x["name"],
                         cmd=x["command"],
-                        target_service=x["target_service"]
+                        target_service=x["target_service"],
+                        secrets=secrets,
+                        envs=envs,
                     )
                 )
                 regex = self.dump_regex(x["name"], x["regex"])
