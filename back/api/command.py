@@ -3,9 +3,9 @@ from generator.model.keywords import RwCliRunCli, Catenate
 
 from os import getenv
 import re
-from flask_restx import Resource, fields, api, Namespace, OrderedModel
+from flask_restx import Resource, fields, api, Namespace, OrderedModel, reqparse, abort
 from typing import List
-
+from robot.variables.assigner import VariableAssigner
 from api.variable import VariableDataResource as VResource
 
 import requests
@@ -14,7 +14,12 @@ api = Namespace("command", description="Command related operations")
 
 command = api.model(
     "Command",
-    {"name": fields.String, "command": fields.String, "regex": fields.String},
+    {
+        "name": fields.String(required=True),
+        "command": fields.String(required=False),
+        "regex": fields.String(required=False, default=""),
+        "target_service": fields.String(required=False, default="")
+    },
 )
 
 
@@ -32,8 +37,11 @@ class CommandResource(object):
         return [x for x in self.commands if x["name"] == name][0]
 
     def add(self, data) -> None:
-        variable = data
-        self.commands.append(variable)
+        self._name_validator(data["name"])
+        self._command_validator(data["command"])
+        self._regex_validator(data["regex"])
+        data['target_service'] = self._target_service_mutator(data['command'])
+        self.commands.append(data)
 
     def dump_regex(self, name, regex):
         if regex != "":
@@ -42,6 +50,43 @@ class CommandResource(object):
             )
             return body
         return None
+
+    def _target_service_mutator(self, value):
+        if value != "":
+            if "kube" in value.lower():
+                return "${kubectl}"
+            if "gcloud" in value.lower():
+                return "${gcloud}"
+            if "curl" in value.lower():
+                return "${curl}"
+        return "${kubectl}" #fallback
+    
+    def _configure_kubernetes(self, data):
+        pass 
+    
+    def _configure_gcloud(self, data):
+        pass
+
+    def _name_validator(self, value):
+        _valid_extended_attr = VariableAssigner._valid_extended_attr
+        if _valid_extended_attr.match(value) is None:
+            abort(
+                400,
+                msg="Name invalid. Please use a snake_case naming convention. For further info refer to https://docs.robotframework.org/docs/variables",
+            )
+
+    def _command_validator(self, value):
+        if value == "":
+            abort(400, msg="Command can not be an empty string")
+
+    def _regex_validator(self, value):
+        if value != "":
+            try:
+                re.compile(value)
+            except re.error:
+                abort(
+                    400, msg="Can not compile provided regex. Please verify the regex."
+                )
 
     def dump(self) -> TaskSectionGenerator:
         if len(self.commands) > 0:
@@ -52,6 +97,7 @@ class CommandResource(object):
                         assign_to_variable=True,
                         variable=x["name"],
                         cmd=x["command"],
+                        target_service=x["target_service"]
                     )
                 )
                 regex = self.dump_regex(x["name"], x["regex"])
@@ -75,14 +121,14 @@ class VarList(Resource):
         return DataResource.commands
 
     @api.doc("add_commands")
-    @api.expect(command)
+    @api.expect(command, validate=True)
     @api.marshal_list_with(command)
     def post(self):
         """Add command"""
         DataResource.add(api.payload), 201
 
     @api.doc("delete_commands")
-    @api.expect(command)
+    @api.expect(command, validate=True)
     def delete(self):
         """Delete command"""
         DataResource.delete_by_name(api.payload["name"]), 201

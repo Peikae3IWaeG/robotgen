@@ -11,14 +11,20 @@ import HelpIcon from "../helpIcon";
 import Item from "../paperitem";
 import DialogComponent from "./regexDialog";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+
 const CommandForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     command: "",
     regex: "",
     additional_info: "",
+    target_service: "",
   });
   const [regexResult, setRegexResult] = useState(null);
+  const [isSimulationLoading, setSimulationIsLoading] = useState(false);
+  const [isRegexGuessLoading, setRegexGuessLoading] = useState(false);
+
   const [outputData, setOutputData] = useState(null);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -37,7 +43,17 @@ const CommandForm = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status >= 400 && response.status <= 599) {
+          return response.json().then((errorData) => {
+            const errorMessage = errorData.msg || "Unknown error occurred.";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+          });
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => {
         console.log("Entry added successfully:", data);
         window.location.reload();
@@ -47,6 +63,7 @@ const CommandForm = () => {
 
   const handleSubmitGpt = (simevent) => {
     simevent.preventDefault();
+    setSimulationIsLoading(true);
     fetch("http://localhost:5127/gpt/simulate", {
       method: "POST",
       headers: {
@@ -56,6 +73,7 @@ const CommandForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setSimulationIsLoading(false);
         setOutputData(data);
       })
       .catch((error) => console.error("Error adding entry:", error));
@@ -63,6 +81,7 @@ const CommandForm = () => {
 
   const handleRegexRequest = () => {
     if (outputData && outputData.gpt_explanation) {
+      setRegexGuessLoading(true);
       fetch("http://localhost:5127/gpt/regex_by_text", {
         method: "POST",
         headers: {
@@ -72,6 +91,7 @@ const CommandForm = () => {
       })
         .then((response) => response.json())
         .then((regexData) => {
+          setRegexGuessLoading(false);
           setRegexResult(regexData.gpt_explanation);
           console.log(JSON.parse(JSON.stringify(regexData.gpt_explanation)));
           setRegexResult(JSON.parse(JSON.stringify(regexData.gpt_explanation)));
@@ -142,10 +162,14 @@ const CommandForm = () => {
           <DialogComponent></DialogComponent>
 
           <Box textAlign="center">
-            <Button onClick={handleSubmitGpt} type="submit">
-              Simulate the output
-            </Button>
-            <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable."></HelpIcon>
+            {isSimulationLoading ? (
+              <CircularProgress /> // Render spinner when isLoading is true
+            ) : (
+              <Button onClick={handleSubmitGpt} type="submit">
+                Simulate the output
+              </Button>
+            )}
+            <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable." />
           </Box>
           <Box textAlign="center">
             <br></br>
@@ -168,12 +192,17 @@ const CommandForm = () => {
           <Item sx={{ overflow: "auto" }}>
             <pre>{outputData.gpt_explanation}</pre>
           </Item>
+
           {outputData && outputData.gpt_explanation && (
-            <Box textAlign="center">
-              <p></p>
-              <Button variant="contained" onClick={handleRegexRequest}>
-                Guess regex
-              </Button>
+            <Box sx={{ m: 4 }} textAlign="center">
+              {isRegexGuessLoading ? (
+                <CircularProgress /> // Render spinner when isLoading is true
+              ) : (
+                <Button variant="contained" onClick={handleRegexRequest}>
+                  Guess regex
+                </Button>
+              )}
+              <HelpIcon info="Simulates the command output using ChatGPT. Requires OPENAI_API_KEY environment variable." />
             </Box>
           )}
 

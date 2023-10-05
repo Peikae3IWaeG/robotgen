@@ -125,6 +125,6 @@ class RobotRun(Resource):
         run_status = requests.post(url=url, json={"data": dumped_robot})
         return {
             "status": run_status.json()["status"],
-            "log_html_url": f"{url}/log",
-            "report_html_url": f"{url}/log",
+            "log_html_url": run_status.json()["log_html_url"],
+            "report_html_url": run_status.json()["report_html_url"],
         }

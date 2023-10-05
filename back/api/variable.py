@@ -9,17 +9,18 @@ from generator.model.statements import (
     SetEnvVarSuiteVariableGenerator,
 )
 
-
-from flask_restx import Resource, fields, api, Namespace, OrderedModel
+import re
+from flask_restx import Resource, fields, api, Namespace, OrderedModel, abort
 from typing import List
+from robot.variables.assigner import VariableAssigner
 
 api = Namespace("variables", description="Variables related operations")
 
 variable = api.model(
     "Variable",
     {
-        "name": fields.String,
-        "description": fields.String,
+        "name": fields.String(required=True),
+        "description": fields.String(),
         "pattern": fields.String,
         "example": fields.String,
         "default": fields.String,
@@ -30,13 +31,13 @@ variable = api.model(
 
 env_variable = api.model(
     "EnvironmentVariable",
-    {"name": fields.String, "value": fields.String},
+    {"name": fields.String(required=True), "value": fields.String(required=True)},
 )
 
 service = api.model(
     "Service",
     {
-        "name": fields.String,
+        "name": fields.String(required=True),
         "description": fields.String,
         "default": fields.String,
         "example": fields.String,
@@ -54,9 +55,26 @@ class VariableResource(object):
     def delete_by_name(self, name) -> None:
         self.variables = [x for x in self.variables if x["name"] != name]
 
+    def _name_validator(self, value):
+        _valid_extended_attr = VariableAssigner._valid_extended_attr
+        if _valid_extended_attr.match(value) is None:
+            abort(
+                400,
+                msg="Name invalid. Please use a snake_case naming convention. For further info refer to https://docs.robotframework.org/docs/variables",
+            )
+
+    def _regex_validator(self, value):
+        if value != "":
+            try:
+                re.compile(value)
+            except re.error:
+                abort(400, msg="Provided pattern does not compile into a regex")
+
     def add(self, data) -> None:
-        variable = data
-        self.variables.append(variable)
+        self._name_validator(data["name"])
+        self._regex_validator(data["pattern"])
+
+        self.variables.append(data)
 
     def dump(self) -> List:
         body = []
@@ -154,14 +172,14 @@ class VarList(Resource):
         return VariableDataResource.dump_plain_variables()
 
     @api.doc("add_var")
-    @api.expect(variable)
-    @api.marshal_list_with(variable)
+    @api.expect(variable, validate=True)
+    @api.marshal_with(variable)
     def post(self):
         """Add variable"""
         VariableDataResource.add(api.payload), 201
 
     @api.doc("del_var")
-    @api.expect(variable)
+    @api.expect(variable, validate=True)
     @api.marshal_with(variable)
     def delete(self):
         """Delete variable"""
@@ -177,14 +195,14 @@ class SecretList(Resource):
         return VariableDataResource.dump_secret_variables()
 
     @api.doc("add_secret")
-    @api.expect(variable)
-    @api.marshal_list_with(variable)
+    @api.expect(variable, validate=True)
+    @api.marshal_with(variable)
     def post(self):
         """Add secret"""
         VariableDataResource.add(api.payload), 201
 
     @api.doc("del_secret")
-    @api.expect(variable)
+    @api.expect(variable, validate=True)
     @api.marshal_with(variable)
     def delete(self):
         """Delete secret"""
@@ -194,14 +212,13 @@ class SecretList(Resource):
 @api.route("/env")
 class EnvVarList(Resource):
     @api.doc("list_env_vars")
-    @api.marshal_list_with(env_variable)
     def get(self):
         """List all vars"""
         return EnvironmentVariableDataResource.variables
 
     @api.doc("add_env_var")
-    @api.expect(env_variable)
-    @api.marshal_list_with(env_variable)
+    @api.expect(env_variable, validate=True)
+    @api.marshal_with(env_variable)
     def post(self):
         """Add variable"""
         EnvironmentVariableDataResource.add(api.payload), 201
@@ -216,8 +233,8 @@ class ServiceList(Resource):
         return ServiceImportDataResource.variables
 
     @api.doc("add_service")
-    @api.expect(service)
-    @api.marshal_list_with(service)
+    @api.expect(service, validate=True)
+    @api.marshal_with(service)
     def post(self):
         """Add variable"""
         ServiceImportDataResource.add(api.payload), 201

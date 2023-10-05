@@ -36,7 +36,17 @@ const VariablesForm = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status >= 400 && response.status <= 599) {
+          return response.json().then((errorData) => {
+            const errorMessage = errorData.msg || "Unknown error occurred.";
+            alert(errorMessage);
+            throw new Error(errorMessage);
+          });
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => {
         console.log("Entry added successfully:", data);
         window.location.reload();

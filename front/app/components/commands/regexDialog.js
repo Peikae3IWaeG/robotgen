@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconButton from "@mui/material/IconButton";
 import HelpIcon from "../helpIcon";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { Grid, Box } from "@mui/material";
 
@@ -18,9 +19,11 @@ const DialogComponent = () => {
     text: "",
   });
 
+  const [isRegexComposeInProgress, setRegexComposeInProgress] = useState(false);
   const [result, setResultData] = useState(null);
 
   const handleRegexSubmit = (regexevent) => {
+    setRegexComposeInProgress(true);
     regexevent.preventDefault();
     fetch("http://localhost:5127/gpt/regex_compose", {
       method: "POST",
@@ -31,6 +34,7 @@ const DialogComponent = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setRegexComposeInProgress(false);
         console.log("Request sucessful:", data);
         setResultData(data);
       })
@@ -103,12 +107,16 @@ const DialogComponent = () => {
                       variant="standard"
                     />
                     <p></p>
-                    <Box justify="flex-end" textAlign="center">
-                      <Button variant="contained" onClick={handleRegexSubmit}>
-                        Generate
-                      </Button>
-                      <HelpIcon info="I.e. 'Generate the regex that catches data in format %Y-%m-%d. Year month and day should be placed in separate named groups.' This in only an example, consider parsing date the proper way."></HelpIcon>
-                    </Box>
+                    {isRegexComposeInProgress ? (
+                      <CircularProgress></CircularProgress>
+                    ) : (
+                      <Box justify="flex-end" textAlign="center">
+                        <Button variant="contained" onClick={handleRegexSubmit}>
+                          Generate
+                        </Button>
+                        <HelpIcon info="I.e. 'Generate the regex that catches data in format %Y-%m-%d. Year month and day should be placed in separate named groups.' This in only an example, consider parsing date the proper way."></HelpIcon>
+                      </Box>
+                    )}
                   </form>
                 </FormControl>
 
